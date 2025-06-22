@@ -5,17 +5,19 @@ function Footer() {
         <div className="grid grid-cols-2 gap-16">
           {/* Left Section */}
           <div className="space-y-8">
-            <h2 className="text-6xl font-bold leading-tight">
-              We celebrate <br/> <span className="text-primary">GAMING</span> and the<br />
-              legends who play.
-            </h2>
+           <h2 className="text-6xl font-bold leading-tight">
+  We celebrate <br /> <span className="text-red-700">GAMING</span> and the<br />
+  legends who play.
+</h2>
+
             
             <div className="flex gap-3">
-              <a href="#" className="w-9 h-9 bg-gray-700 rounded-md flex items-center justify-center text-base hover:bg-primary hover:-translate-y-0.5 transition-all">📘</a>
-              <a href="#" className="w-9 h-9 bg-gray-700 rounded-md flex items-center justify-center text-base hover:bg-primary hover:-translate-y-0.5 transition-all">📸</a>
-              <a href="#" className="w-9 h-9 bg-gray-700 rounded-md flex items-center justify-center text-base hover:bg-primary hover:-translate-y-0.5 transition-all">🐦</a>
-              <a href="#" className="w-9 h-9 bg-gray-700 rounded-md flex items-center justify-center text-base hover:bg-primary hover:-translate-y-0.5 transition-all">📺</a>
-              <a href="#" className="w-9 h-9 bg-gray-700 rounded-md flex items-center justify-center text-base hover:bg-primary hover:-translate-y-0.5 transition-all">🎵</a>
+<a href="#" className="w-9 h-9 bg-gray-700 rounded-md flex items-center justify-center text-base hover:bg-[#8A0303] hover:-translate-y-0.5 transition-all">📘</a>
+<a href="#" className="w-9 h-9 bg-gray-700 rounded-md flex items-center justify-center text-base hover:bg-[#8A0303] hover:-translate-y-0.5 transition-all">📸</a>
+<a href="#" className="w-9 h-9 bg-gray-700 rounded-md flex items-center justify-center text-base hover:bg-[#8A0303] hover:-translate-y-0.5 transition-all">🐦</a>
+<a href="#" className="w-9 h-9 bg-gray-700 rounded-md flex items-center justify-center text-base hover:bg-[#8A0303] hover:-translate-y-0.5 transition-all">📺</a>
+<a href="#" className="w-9 h-9 bg-gray-700 rounded-md flex items-center justify-center text-base hover:bg-[#8A0303] hover:-translate-y-0.5 transition-all">🎵</a>
+
             </div>
             
             <div className="space-y-2">
@@ -29,17 +31,17 @@ function Footer() {
             <div className="grid grid-cols-4 gap-8 flex-1">
               <div className="space-y-2">
                 <h4 className="text-white text-sm font-semibold mb-1">Community</h4>
-<a href="#" className="block text-black text-sm hover:text-red-500 transition-colors">
+<a href="#" className="block text-black text-sm hover:text-red-700 transition-colors">
   Discord
 </a>
-                <a href="#" className="block text-black text-sm hover:text-primary transition-colors">Twitter</a>
-                <a href="#" className="block text-black text-sm hover:text-primary transition-colors">Reddit</a>
-                <a href="#" className="block text-black text-sm hover:text-primary transition-colors">Twitch</a>
+                <a href="#" className="block text-black text-sm hover:bg-[#8A0303] transition-colors">Twitter</a>
+                <a href="#" className="block text-black text-sm hover:bg-[#8A0303] transition-colors">Reddit</a>
+                <a href="#" className="block text-black text-sm hover:bg-[#8A0303] transition-colors">Twitch</a>
               </div>
               
               <div className="space-y-2">
                 <h4 className="text-white text-sm font-semibold mb-1">Company</h4>
-                <a href="#" className="block text-black text-sm hover:text-primary transition-colors">About</a>
+                <a href="#" className="block text-black text-sm hover:bg-[#8A0303] transition-colors">About</a>
                 <a href="#" className="block text-black text-sm hover:text-primary transition-colors">Jobs</a>
                 <a href="#" className="block text-black text-sm hover:text-primary transition-colors">Press</a>
                 <a href="#" className="block text-black text-sm hover:text-primary transition-colors">News</a>

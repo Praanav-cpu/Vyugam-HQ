@@ -1,75 +1,100 @@
-import { useState } from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { Bell } from 'lucide-react';
 
-function Header() {
-  const [searchQuery, setSearchQuery] = useState('')
-  const location = useLocation()
+const Header = () => {
+  const [activeTab, setActiveTab] = useState("tournament");
+  const navigate = useNavigate();
 
-  const handleSearch = (e) => {
-    e.preventDefault()
-    console.log('Searching for:', searchQuery)
-  }
+  const handleTabClick = (tab) => {
+    setActiveTab(tab);
+    if (tab === "tournament") navigate("/");
+    else navigate("/Blog");
+  };
 
   return (
-    <header className="fixed top-0 left-0 right-0 bg-white/98 backdrop-blur-sm border-b border-gray-200 z-50 h-[70px]">
-      <div className="max-w-7xl mx-auto px-6 h-full">
-        <div className="flex items-center justify-between h-full">
-          {/* Logo */}
-          <div className="flex items-center">
-            <Link to="/" className="no-underline">
-              <div className="bg-primary text-white w-8 h-8 rounded-md flex items-center justify-center font-bold text-base">
-                V
-              </div>
-            </Link>
-          </div>
-
-          {/* Navigation */}
-          <nav className="flex gap-10">
-            <Link 
-              to="/" 
-              className={`text-gray-600 no-underline font-medium text-sm py-2 relative transition-colors hover:text-gray-900 ${
-                location.pathname === '/' ? 'text-gray-900 after:absolute after:bottom-[-10px] after:left-0 after:right-0 after:h-0.5 after:bg-primary' : ''
-              }`}
-            >
-              Home
-            </Link>
-            <Link 
-              to="/blog" 
-              className={`text-gray-600 no-underline font-medium text-sm py-2 relative transition-colors hover:text-gray-900 ${
-                location.pathname === '/blog' ? 'text-gray-900 after:absolute after:bottom-[-10px] after:left-0 after:right-0 after:h-0.5 after:bg-primary' : ''
-              }`}
-            >
-              Blog
-            </Link>
-          </nav>
-
-          {/* Search and Profile */}
-          <div className="flex items-center gap-6">
-            <form onSubmit={handleSearch} className="relative">
-              <input
-                type="text"
-                placeholder="Search tournaments, or use the global command"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-[400px] px-4 py-2.5 pr-16 border border-gray-200 rounded-md text-sm bg-gray-50 transition-all focus:outline-none focus:border-primary focus:bg-white focus:ring-3 focus:ring-primary/10"
-              />
-              <div className="absolute right-3 top-1/2 -translate-y-1/2 flex gap-1">
-                <span className="bg-gray-200 text-gray-600 px-2 py-0.5 rounded text-xs font-medium">Ctrl</span>
-                <span className="bg-gray-200 text-gray-600 px-2 py-0.5 rounded text-xs font-medium">K</span>
-              </div>
-            </form>
-
-            <Link to="/profile" className="flex items-center gap-2 no-underline text-gray-900 px-3 py-1.5 rounded-md hover:bg-gray-50 transition-colors">
-              <div className="w-7 h-7 bg-gray-200 rounded-full flex items-center justify-center text-sm">
-                👤
-              </div>
-              <span className="font-medium text-sm">worldtricks</span>
-            </Link>
+    <>
+      {/* Top Navbar */}
+      <nav className="fixed top-0 left-0 w-full bg-white text-black border-b border-gray-400 z-50 px-6 py-4 flex items-center justify-between">
+        {/* Left Side: Logo + Links */}
+        <div className="flex items-center gap-10">
+          <img src="/assets/Vyugam.png" alt="GameZone Logo" className="w-8 h-8" />
+          <div className="hidden md:flex gap-6 text-lg">
+            <Link to="/" className="hover:text-red-500">Home</Link>
+            <Link to="/blog" className="hover:text-red-500">Blog</Link>
           </div>
         </div>
-      </div>
-    </header>
-  )
-}
 
-export default Header
+        {/* Right Side: Profile Info */}
+        <div className="flex items-center gap-3">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+            viewBox="0 0 24 24" strokeWidth={1.5}
+            stroke="currentColor" className="w-6 h-6">
+            <path strokeLinecap="round" strokeLinejoin="round"
+              d="M15.182 15.182a4.5 4.5 0 0 1-6.364 0
+              M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z
+              M9.75 9.75c0 .414-.168.75-.375.75S9 10.164 9 9.75
+              9.168 9 9.375 9s.375.336.375.75Zm-.375 0h.008v.015h-.008V9.75Z
+              m5.625 0c0 .414-.168.75-.375.75s-.375-.336-.375-.75
+              .168-.75.375-.75.375.336.375.75Zm-.375 0h.008v.015h-.008V9.75Z" />
+          </svg>
+          <span className="text-sm font-medium">Username</span>
+          <Bell className="w-5 h-5 cursor-pointer hover:text-red-500" />
+        </div>
+      </nav>
+
+      {/* Toggle Buttons */}
+      <div className="pt-24 flex justify-center">
+        <div className="inline-flex bg-[#f2f2f2] p-1 rounded-xl shadow-inner">
+          <button
+            className={`px-5 py-2 rounded-xl text-black font-semibold text-sm transition-all ${
+              activeTab === "tournament" ? "bg-[#d8baba] shadow-md" : ""
+            }`}
+            onClick={() => handleTabClick("tournament")}
+          >
+            TOURNAMENT
+          </button>
+          <button
+            className={`px-5 py-2 rounded-xl text-black font-semibold text-sm transition-all ${
+              activeTab === "gamers" ? "bg-[#d8baba] shadow-md" : ""
+            }`}
+            onClick={() => handleTabClick("gamers")}
+          >
+            GAMERS
+          </button>
+        </div>
+      </div>
+
+      {/* Search Bar */}
+     <div className="mt-6 flex justify-center gap-4 px-4 pb-4 border-b border-gray-300">
+
+        <div className="flex items-center bg-[#f2f2f2] rounded-xl px-3 py-2 w-full max-w-xl">
+          {/* Search Icon */}
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-4.35-4.35M10 18a8 8 0 100-16 8 8 0 000 16z" />
+          </svg>
+
+          {/* Input */}
+          <input
+            type="text"
+            placeholder="Type to begin search , or use Ctrl + K"
+            className="bg-transparent flex-grow text-sm outline-none placeholder:text-gray-500"
+          />
+
+          {/* Shortcut hint */}
+          <div className="flex items-center gap-1 text-xs text-black font-medium bg-grey-700 px-2 py-0.5 rounded border border-gray-300">
+            <span>enter</span>
+             
+          </div>
+        </div>
+
+        {/* Side button */}
+        <button className="bg-[#f2f2f2] px-4 py-2 rounded-xl text-sm font-medium text-black">
+          Your Tournament
+        </button>
+      </div>
+    </>
+  );
+};
+
+export default Header;
