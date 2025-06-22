@@ -21,8 +21,8 @@ const Header = () => {
         <div className="flex items-center gap-10">
          <img src={VyugamLogo} alt="Vyugam Logo" className="w-8 h-8" />
           <div className="hidden md:flex gap-6 text-lg">
-            <Link to="/" className="hover:text-red-500">Home</Link>
-            <Link to="/blog" className="hover:text-red-500">Blog</Link>
+            <Link to="/" className= "text-gray-500 hover:text-red-500">Home</Link>
+            <Link to="/blog" className="text-gray-500 hover:text-red-500">Blog</Link>
           </div>
         </div>
 
