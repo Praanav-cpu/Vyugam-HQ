@@ -8,7 +8,7 @@ function Home() {
       title2 : "BGIS",
        
       isLive: true,
-      gameImage: "/public/img/tournament .png",
+      gameImage: "/img/tournament .png",
     
     },
     {
@@ -16,7 +16,7 @@ function Home() {
       title: "BGG vs Aditya Tournament",
       
       isLive: true,
-      gameImage: "/public/img/tournament .png",
+      gameImage: "/img/tournament .png",
       
     },
     {
@@ -24,7 +24,7 @@ function Home() {
       title: "Veda vs Aditya Tournament",
      
       isLive: true,
-      gameImage: "/public/img/tournament .png",
+      gameImage: "/img/tournament .png",
       
     },
     {
@@ -32,7 +32,7 @@ function Home() {
       title: "BGG vs Aditya Tournament",
       
       isLive: true,
-      gameImage: "/public/img/tournament .png",
+      gameImage: "/img/tournament .png",
       
      
     }
@@ -43,26 +43,26 @@ function Home() {
       id: 5,
       title: "Veda vs Aditya Tournament",
       
-      gameImage: "/public/img/tournament .png"
+      gameImage: "/img/tournament .png"
        
     },
     {
       id: 6,
       title: "BGG vs Aditya Tournament",
       
-gameImage: "/public/img/tournament .png"      
+gameImage: "/img/tournament .png"      
     },
     {
       id: 7,
       title: "Veda vs Aditya Tournament",
        
-gameImage: "/public/img/tournament .png"       
+gameImage: "/img/tournament .png"       
     },
     {
       id: 8,
       title: "BGG vs Aditya Tournament",
        
-gameImage: "/public/img/tournament .png"       
+gameImage: "/img/tournament .png"       
     }
   ]
 
