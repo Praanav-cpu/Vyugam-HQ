@@ -20,7 +20,6 @@ function App() {
             <Route path="/profile" element={<Profile />} />
           </Routes>
         </main>
-
         {/* Footer */}
         <Footer />
       </div>
