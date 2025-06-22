@@ -92,7 +92,7 @@ function Home() {
   return (
     <div className="bg-white">
       {/* Hero Banner Section */}
-      <section className="py-12 bg-white">
+      <section className="py-12 bg-gray-200">
   <div className="max-w-6xl mx-auto px-6">
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       {/* Campus Warzone Banner */}
@@ -138,7 +138,7 @@ function Home() {
 
 
       {/* Open Tournaments Section */}
-      <section className="py-10">
+      <section className="py-10 bg-gray-200">
         <div className="max-w-6xl mx-auto px-6">
          <div className="flex items-center gap-4 mt-6 mb-8">
   <h2 className="text-3xl font-bold text-gray-900 whitespace-nowrap">Open</h2>
@@ -158,7 +158,7 @@ function Home() {
       </section>
 
       {/* Past Tournaments Section */}
-      <section className="py-10">
+      <section className="py-10 bg-gray-200">
         <div className="max-w-6xl mx-auto px-6">
           <div className="flex justify-between items-center mb-8">
             <h2 className="text-3xl font-bold text-gray-900">Past</h2>

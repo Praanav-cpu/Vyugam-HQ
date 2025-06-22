@@ -8,8 +8,8 @@ import {
 
 function Footer() {
   return (
-    <footer className="bg-white text-black py-12 mt-16">
-      <div className="max-w-6xl mx-auto px-6">
+    <footer className="bg-gray-200 text-black py-12 mt-16">
+      <div className="max-w-6xl mx-auto px-6 bg-gray-200">
         <div className="grid grid-cols-2 gap-16">
           {/* Left Section */}
           <div className="space-y-8">
@@ -69,7 +69,7 @@ function Footer() {
             <div className="grid grid-cols-4 gap-8 flex-1">
               {/* Community */}
               <div className="space-y-2">
-                <h4 className="text-white text-sm font-semibold mb-1">
+                <h4 className="text-black text-sm font-semibold mb-1">
                   Community
                 </h4>
                 <a
@@ -100,7 +100,7 @@ function Footer() {
 
               {/* Company */}
               <div className="space-y-2">
-                <h4 className="text-white text-sm font-semibold mb-1">
+                <h4 className="text-black text-sm font-semibold mb-1">
                   Company
                 </h4>
                 <a
@@ -131,7 +131,7 @@ function Footer() {
 
               {/* Resources */}
               <div className="space-y-2">
-                <h4 className="text-white text-sm font-semibold mb-1">
+                <h4 className="text-black text-sm font-semibold mb-1">
                   Resources
                 </h4>
                 <a
@@ -162,7 +162,7 @@ function Footer() {
 
               {/* Developers */}
               <div className="space-y-2">
-                <h4 className="text-white text-sm font-semibold mb-1">
+                <h4 className="text-black text-sm font-semibold mb-1">
                   Developers
                 </h4>
                 <a
@@ -193,7 +193,7 @@ function Footer() {
             </div>
 
             {/* 🎮 Emoji */}
-            <div className="mt-56">
+            <div className="mt-56 bg-gray-200">
               <div className="text-9xl opacity-100 transform -rotate-12 hover:opacity-50 hover:-rotate-6 hover:scale-105 transition-all cursor-pointer">
                 🎮
               </div>
