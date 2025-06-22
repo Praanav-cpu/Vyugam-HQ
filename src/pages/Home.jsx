@@ -162,7 +162,9 @@ function Home() {
         <div className="max-w-6xl mx-auto px-6">
           <div className="flex justify-between items-center mb-8">
             <h2 className="text-3xl font-bold text-gray-900">Past</h2>
-            <a href="#" className="text-gray-600 hover:text-primary font-medium text-sm transition-colors">
+              <div className="flex-grow h-px bg-gray-300"></div>
+
+            <a href="#" className="bg-[#f2f2f2] px-4 py-2 rounded-xl  text-black hover:text-primary font-medium text-sm whitespace-nowrap">
               All Past Tournaments →
             </a>
           </div>

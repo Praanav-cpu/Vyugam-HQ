@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Bell } from 'lucide-react';
+import VyugamLogo from '../assets/Vyugam.png';
 
 const Header = () => {
   const [activeTab, setActiveTab] = useState("tournament");
@@ -18,7 +19,7 @@ const Header = () => {
       <nav className="fixed top-0 left-0 w-full bg-white text-black border-b border-gray-400 z-50 px-6 py-4 flex items-center justify-between">
         {/* Left Side: Logo + Links */}
         <div className="flex items-center gap-10">
-          <img src="/assets/Vyugam.png" alt="GameZone Logo" className="w-8 h-8" />
+         <img src={VyugamLogo} alt="Vyugam Logo" className="w-8 h-8" />
           <div className="hidden md:flex gap-6 text-lg">
             <Link to="/" className="hover:text-red-500">Home</Link>
             <Link to="/blog" className="hover:text-red-500">Blog</Link>
@@ -77,7 +78,7 @@ const Header = () => {
           {/* Input */}
           <input
             type="text"
-            placeholder="Type to begin search , or use Ctrl + K"
+            placeholder="search your tournament"
             className="bg-transparent flex-grow text-sm outline-none placeholder:text-gray-500"
           />
 
