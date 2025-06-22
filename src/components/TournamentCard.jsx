@@ -1,5 +1,9 @@
+import { FaDiscord, FaInstagram } from 'react-icons/fa';
+
+
 function TournamentCard({ 
   title, 
+  title2 = "",
   team1, 
   team2, 
   viewers, 
@@ -10,9 +14,9 @@ function TournamentCard({
   team2Logo 
 }) {
   return (
-    <div className="bg-white rounded-lg overflow-hidden shadow-sm border border-gray-100 hover:shadow-md hover:-translate-y-1 transition-all duration-300">
+    <div className="bg-white rounded-lg overflow-hidden shadow-md border border-gray-200 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 min-h-[360px]">
       {/* Tournament Image */}
-      <div className="relative h-36 overflow-hidden">
+      <div className="relative h-56 overflow-hidden"> {/* height increased */}
         <img 
           src={gameImage} 
           alt={title} 
@@ -20,63 +24,43 @@ function TournamentCard({
         />
         {isLive && (
           <div className="absolute top-2 left-2">
-            <span className="live-badge">LIVE</span>
+            <span className="bg-red-600 text-white px-2 py-1 text-xs rounded">
+              LIVE
+            </span>
           </div>
         )}
       </div>
-      
+
       {/* Tournament Content */}
-      <div className="p-4">
-        {/* Title */}
-        <h3 className="text-base font-semibold text-gray-900 mb-3 leading-tight">
-          {title}
+      <div className="p-5"> {/* padding increased */}
+        {/* Title with optional line break */}
+        <h3 className="text-lg font-semibold text-gray-900 mb-3 leading-tight">
+          {title} {title2 && <><br />{title2}</>}
         </h3>
-        
-        {/* Teams */}
-        <div className="flex items-center justify-between mb-4 p-3 bg-gray-50 rounded-md">
-          <div className="flex flex-col items-center gap-2 flex-1">
-            <img 
-              src={team1Logo} 
-              alt={team1} 
-              className="w-8 h-8 rounded-full object-cover border-2 border-gray-200"
-            />
-            <span className="text-xs font-semibold text-gray-900 text-center">
-              {team1}
-            </span>
-          </div>
-          
-          <div className="bg-white px-2 py-1 rounded text-xs font-bold text-gray-600 mx-2">
-            VS
-          </div>
-          
-          <div className="flex flex-col items-center gap-2 flex-1">
-            <img 
-              src={team2Logo} 
-              alt={team2} 
-              className="w-8 h-8 rounded-full object-cover border-2 border-gray-200"
-            />
-            <span className="text-xs font-semibold text-gray-900 text-center">
-              {team2}
-            </span>
-          </div>
-        </div>
+
+         {/* Icons */}
+ <div className="flex items-center gap-2">
+  <a href="https://discord.com" target="_blank" rel="noopener noreferrer">
+    <FaDiscord className="w-5 h-5 text-gray-500 hover:text-blue-600 cursor-pointer" />
+  </a>
+  <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">
+    <FaInstagram className="w-5 h-5 text-gray-500 hover:text-pink-600 cursor-pointer" />
+  </a>
+</div>
+
 
         {/* Meta Info and Actions */}
-        <div className="flex justify-between items-center">
-          <div className="flex items-center gap-3">
-            <span className="flex items-center gap-1 text-xs text-gray-600 font-medium">
-              👁 {viewers}
-            </span>
-            <span className="text-xs text-gray-600">
-              {timestamp}
-            </span>
+        <div className="flex justify-between items-center mt-8">
+          <div className="flex items-center gap-3 text-xs text-gray-600 font-medium">
+            {/* <span>👁 {viewers}</span> */}
+            {/* <span>{timestamp}</span> */}
           </div>
-          
+
           <div className="flex gap-2">
-            <button className="btn btn-secondary text-xs px-3 py-1.5">
+            <button className="bg-gray-200 text-gray-800 px-3 py-1.5 rounded text-xs font-medium">
               Follow
             </button>
-            <button className="btn btn-primary text-xs px-3 py-1.5">
+            <button className="bg-red-500 text-white px-3 py-1.5 rounded text-xs font-medium">
               {isLive ? 'Watch Live' : 'View Details'}
             </button>
           </div>
@@ -86,4 +70,4 @@ function TournamentCard({
   )
 }
 
-export default TournamentCard
+export default TournamentCard;
