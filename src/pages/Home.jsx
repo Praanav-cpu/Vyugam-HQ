@@ -1,183 +1,186 @@
-import TournamentCard from '../components/TournamentCard'
+import TournamentCard from "../components/TournamentCard";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Pagination, Autoplay } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/pagination";
 
 function Home() {
   const openTournaments = [
     {
       id: 1,
-      title: "Campu Warzone ",
-      title2 : "BGIS",
-       
-      isLive: true,
-      gameImage: "https://images.pexels.com/photos/442576/pexels-photo-442576.jpeg?auto=compress&cs=tinysrgb&w=400",
-    
+      title: "Valo in Action Tournament",
+      title2: "Gaming",
+      statusTags: ["ONLINE", "OPEN", "LIVE"],
+      participants: 500,
+      image:
+        "https://images.pexels.com/photos/442576/pexels-photo-442576.jpeg?auto=compress&cs=tinysrgb&w=600",
     },
     {
       id: 2,
-      title: "BGG vs Aditya Tournament",
-      
-      isLive: true,
-      gameImage: "https://images.pexels.com/photos/442576/pexels-photo-442576.jpeg?auto=compress&cs=tinysrgb&w=400",
-      
+      title: "BCCI in Action Tournament",
+      title2: "Gaming",
+      statusTags: ["ONLINE", "OPEN", "LIVE"],
+      participants: 500,
+      image:
+        "https://images.pexels.com/photos/442576/pexels-photo-442576.jpeg?auto=compress&cs=tinysrgb&w=600",
     },
     {
       id: 3,
-      title: "Veda vs Aditya Tournament",
-     
-      isLive: true,
-      gameImage: "https://images.pexels.com/photos/442576/pexels-photo-442576.jpeg?auto=compress&cs=tinysrgb&w=400",
-      
+      title: "Valo in Action Tournament",
+      title2: "Gaming",
+      statusTags: ["ONLINE", "OPEN", "LIVE"],
+      participants: 500,
+      image:
+        "https://images.pexels.com/photos/442576/pexels-photo-442576.jpeg?auto=compress&cs=tinysrgb&w=600",
     },
     {
       id: 4,
-      title: "BGG vs Aditya Tournament",
-      
-      isLive: true,
-      gameImage: "https://images.pexels.com/photos/442576/pexels-photo-442576.jpeg?auto=compress&cs=tinysrgb&w=400",
-      
-     
-    }
-  ]
+      title: "BCCI in Action Tournament",
+      title2: "Gaming",
+      statusTags: ["ONLINE", "OPEN", "LIVE"],
+      participants: 500,
+      image:
+        "https://images.pexels.com/photos/442576/pexels-photo-442576.jpeg?auto=compress&cs=tinysrgb&w=600",
+    },
+  ];
 
   const pastTournaments = [
     {
       id: 5,
-      title: "Veda vs Aditya Tournament",
-      team1: "Veda",
-      team2: "Aditya",
-      viewers: "5.2k",
-      timestamp: "Ended",
-      isLive: false,
-      gameImage: "https://images.pexels.com/photos/442576/pexels-photo-442576.jpeg?auto=compress&cs=tinysrgb&w=400",
-      team1Logo: "https://images.pexels.com/photos/1040158/pexels-photo-1040158.jpeg?auto=compress&cs=tinysrgb&w=100",
-      team2Logo: "https://images.pexels.com/photos/1040158/pexels-photo-1040158.jpeg?auto=compress&cs=tinysrgb&w=100"
+      title: "BGMI Squad Face-Off",
+      title2: "Gaming (Past)",
+      statusTags: ["OFFLINE", "ENDED"],
+      participants: 800,
+      image:
+        "https://images.pexels.com/photos/6153444/pexels-photo-6153444.jpeg?auto=compress&cs=tinysrgb&w=600",
     },
     {
       id: 6,
-      title: "BGG vs Aditya Tournament",
-      team1: "BGG",
-      team2: "Aditya",
-      viewers: "4.8k",
-      timestamp: "Ended",
-      isLive: false,
-      gameImage: "https://images.pexels.com/photos/442576/pexels-photo-442576.jpeg?auto=compress&cs=tinysrgb&w=400",
-      team1Logo: "https://images.pexels.com/photos/1040158/pexels-photo-1040158.jpeg?auto=compress&cs=tinysrgb&w=100",
-      team2Logo: "https://images.pexels.com/photos/1040158/pexels-photo-1040158.jpeg?auto=compress&cs=tinysrgb&w=100"
+      title: "Free Fire Nationals",
+      title2: "Gaming (Past)",
+      statusTags: ["OFFLINE", "COMPLETED"],
+      participants: 640,
+      image:
+        "https://images.pexels.com/photos/6153448/pexels-photo-6153448.jpeg?auto=compress&cs=tinysrgb&w=600",
     },
     {
       id: 7,
-      title: "Veda vs Aditya Tournament",
-      team1: "Veda",
-      team2: "Aditya",
-      viewers: "6.1k",
-      timestamp: "Ended",
-      isLive: false,
-      gameImage: "https://images.pexels.com/photos/442576/pexels-photo-442576.jpeg?auto=compress&cs=tinysrgb&w=400",
-      team1Logo: "https://images.pexels.com/photos/1040158/pexels-photo-1040158.jpeg?auto=compress&cs=tinysrgb&w=100",
-      team2Logo: "https://images.pexels.com/photos/1040158/pexels-photo-1040158.jpeg?auto=compress&cs=tinysrgb&w=100"
+      title: "Valorant Solo Clash",
+      title2: "Gaming (Past)",
+      statusTags: ["ONLINE", "ENDED"],
+      participants: 720,
+      image:
+        "https://images.pexels.com/photos/12877694/pexels-photo-12877694.jpeg?auto=compress&cs=tinysrgb&w=600",
     },
     {
       id: 8,
-      title: "BGG vs Aditya Tournament",
-      team1: "BGG",
-      team2: "Aditya",
-      viewers: "3.9k",
-      timestamp: "Ended",
-      isLive: false,
-      gameImage: "https://images.pexels.com/photos/442576/pexels-photo-442576.jpeg?auto=compress&cs=tinysrgb&w=400",
-      team1Logo: "https://images.pexels.com/photos/1040158/pexels-photo-1040158.jpeg?auto=compress&cs=tinysrgb&w=100",
-      team2Logo: "https://images.pexels.com/photos/1040158/pexels-photo-1040158.jpeg?auto=compress&cs=tinysrgb&w=100"
-    }
-  ]
+      title: "Call of Duty Challenge",
+      title2: "Gaming (Past)",
+      statusTags: ["ONLINE", "FINISHED"],
+      participants: 570,
+      image:
+        "https://images.pexels.com/photos/6153449/pexels-photo-6153449.jpeg?auto=compress&cs=tinysrgb&w=600",
+    },
+  ];
 
   return (
-    <div className="bg-white">
-      {/* Hero Banner Section */}
-      <section className="py-12 bg-gray-200">
-  <div className="max-w-6xl mx-auto px-6">
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-      {/* Campus Warzone Banner */}
-      <div className="relative h-64 rounded-xl overflow-hidden cursor-pointer hover:-translate-y-1 transition-transform duration-300 bg-gradient-to-r from-primary to-primary-dark">
-        <div className="relative z-10 p-8 h-full flex flex-col justify-center text-white">
-          <h2 className="text-4xl font-extrabold leading-tight mb-2 tracking-tight">
-            CAMPUS<br />WARZONE
-          </h2>
-          <p className="text-base opacity-90 font-medium">
-            Join the ultimate gaming competition
-          </p>
-        </div>
-        <div className="absolute top-0 right-0 bottom-0 w-2/5 opacity-40">
-          <img 
-            src="https://images.pexels.com/photos/442576/pexels-photo-442576.jpeg?auto=compress&cs=tinysrgb&w=600" 
-            alt="Campus Warzone" 
-            className="w-full h-full object-cover"
-          />
-        </div>
-      </div>
+    <div className="bg-gray-100 py-10 min-h-screen">
+      <div className="max-w-[96%] mx-auto px-2">
 
-      {/* Campus Valorant Banner */}
-      <div className="relative h-64 rounded-xl overflow-hidden cursor-pointer hover:-translate-y-1 transition-transform duration-300 bg-gradient-to-r from-gray-900 to-gray-700">
-        <div className="relative z-10 p-8 h-full flex flex-col justify-center text-white">
-          <h2 className="text-4xl font-extrabold leading-tight mb-2 tracking-tight">
-            CAMPUS<br />VALORANT
-          </h2>
-          <p className="text-base opacity-90 font-medium">
-            Experience tactical FPS gaming
-          </p>
+        {/* 🎠 Swiper Slider Section */}
+        <div className="mb-12 relative">
+          <Swiper
+            modules={[Pagination, Autoplay]}
+            pagination={{
+              el: '.swiper-pagination-custom',
+              clickable: true,
+            }}
+            autoplay={{
+              delay: 3000,
+              disableOnInteraction: false,
+            }}
+            spaceBetween={20}
+            loop={true}
+            slidesPerView={1.2}
+            breakpoints={{
+              640: { slidesPerView: 1.2 },
+              768: { slidesPerView: 1.5 },
+              1024: { slidesPerView: 2.2 },
+            }}
+          >
+            <SwiperSlide>
+              <img
+                src="/cod.jpeg"
+                alt="COD Banner"
+                className="rounded-xl w-full object-cover h-[200px] sm:h-[250px]"
+              />
+            </SwiperSlide>
+
+            <SwiperSlide>
+              <img
+                src="/valorant.jpeg"
+                alt="Valorant Banner"
+                className="rounded-xl w-full object-cover h-[200px] sm:h-[250px]"
+              />
+            </SwiperSlide>
+
+            <SwiperSlide>
+              <img
+                src="/codmod.jpg"
+                alt="Slide 3"
+                className="rounded-xl w-full object-cover h-[200px] sm:h-[250px]"
+              />
+            </SwiperSlide>
+
+            <SwiperSlide>
+              <img
+                src="/bgmi.jpeg"
+                alt="Slide 4"
+                className="rounded-xl w-full object-cover h-[200px] sm:h-[250px]"
+              />
+            </SwiperSlide>
+          </Swiper>
+
+          {/* ✅ Display Dots Below */}
+          <div className="swiper-pagination-custom mt-4 flex justify-center"></div>
         </div>
-        <div className="absolute top-0 right-0 bottom-0 w-2/5 opacity-40">
-          <img 
-            src="https://images.pexels.com/photos/7915435/pexels-photo-7915435.jpeg?auto=compress&cs=tinysrgb&w=600" 
-            alt="Campus Valorant" 
-            className="w-full h-full object-cover"
-          />
+
+        {/* ========================= OPEN SECTION ========================= */}
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-2xl font-bold">Open</h2>
+          <a
+            href="#"
+            className="rounded-full bg-gray-200 hover:bg-gray-300 px-4 py-2 text-sm font-medium text-black transition"
+          >
+            All Your Tournaments &gt;
+          </a>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-10 mb-16">
+          {openTournaments.map((tournament) => (
+            <TournamentCard key={tournament.id} {...tournament} />
+          ))}
+        </div>
+
+        {/* ========================= PAST SECTION ========================= */}
+        <div className="flex items-center justify-between mb-6 mt-10">
+          <h2 className="text-2xl font-bold">Past</h2>
+          <a
+            href="#"
+            className="rounded-full bg-gray-200 hover:bg-gray-300 px-4 py-2 text-sm font-medium text-black transition"
+          >
+            All Past Tournaments &gt;
+          </a>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-10">
+          {pastTournaments.map((tournament) => (
+            <TournamentCard key={tournament.id} {...tournament} />
+          ))}
         </div>
       </div>
     </div>
-  </div>
-</section>
-
-
-      {/* Open Tournaments Section */}
-      <section className="py-10 bg-gray-200">
-        <div className="max-w-6xl mx-auto px-6">
-         <div className="flex items-center gap-4 mt-6 mb-8">
-  <h2 className="text-3xl font-bold text-gray-900 whitespace-nowrap">Open</h2>
-  <div className="flex-grow h-px bg-gray-300"></div>
-  <a href="#" className=" bg-[#f2f2f2] px-4 py-2 rounded-xl  text-black hover:text-primary font-medium text-sm whitespace-nowrap">
-    See Tournament →
-  </a>
-</div>
-
-          
-          <div className="grid grid-cols-2 gap-5">
-            {openTournaments.map(tournament => (
-              <TournamentCard key={tournament.id} {...tournament} />
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Past Tournaments Section */}
-      <section className="py-10 bg-gray-200">
-        <div className="max-w-6xl mx-auto px-6">
-          <div className="flex justify-between items-center mb-8">
-            <h2 className="text-3xl font-bold text-gray-900">Past</h2>
-              <div className="flex-grow h-px bg-gray-300"></div>
-
-            <a href="#" className="bg-[#f2f2f2] px-4 py-2 rounded-xl  text-black hover:text-primary font-medium text-sm whitespace-nowrap">
-              All Past Tournaments →
-            </a>
-          </div>
-          
-          <div className="grid grid-cols-2 gap-5">
-            {pastTournaments.map(tournament => (
-              <TournamentCard key={tournament.id} {...tournament} />
-            ))}
-          </div>
-        </div>
-      </section>
-    </div>
-  )
+  );
 }
 
-export default Home
+export default Home;

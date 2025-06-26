@@ -4,6 +4,9 @@ import Footer from './components/Footer'
 import Home from './pages/Home'
 import Blog from './pages/Blog'
 import Profile from './pages/Profile'
+import TournamentListPage from './components/TournamentListPage'
+
+
 
 function App() {
   return (
