@@ -1,8 +1,10 @@
+import React, { useRef, useState } from "react";
 import TournamentCard from "../components/TournamentCard";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, Autoplay } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
+
 
 function Home() {
   const swiperRef = useRef(null);
