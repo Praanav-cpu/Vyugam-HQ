@@ -32,6 +32,7 @@ const ResetPassword = () => {
       setMessage("Password must be at least 6 characters.");
       return;
     }
+
     if (password !== confirmPassword) {
       setMessage("Passwords do not match.");
       return;
