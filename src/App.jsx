@@ -21,7 +21,7 @@ function AppLayout() {
         <Routes>
           {/* Auth Routes */}
           <Route path="/signup" element={<Signup />} />
-          <Route path="/signIn" element={<SignIn />} />
+          <Route path="/signin" element={<SignIn />} />
           <Route path="/verify" element={<EmailVerification />} />
           <Route path="/reset-password" element={<ResetPassword />} />
 
