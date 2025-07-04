@@ -1,10 +1,8 @@
-import { useEffect, useRef, useState } from "react";
 import TournamentCard from "../components/TournamentCard";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Pagination } from "swiper/modules";
+import { Pagination, Autoplay } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
-import "../index.css";
 
 function Home() {
   const swiperRef = useRef(null);
@@ -12,126 +10,178 @@ function Home() {
 
   // ✅ Add minimum 4 to make loop + 2 per view stable
   const openTournaments = [
-    { id: 1, title: "Valo Tournament", image: "/cod.jpeg", statusTags: ["OPEN"], participants: 500 },
-    { id: 2, title: "BCCI Showdown", image: "/valorant.jpeg", statusTags: ["LIVE"], participants: 300 },
-    { id: 3, title: "COD MOD", image: "/codmod.jpg", statusTags: ["SOLO"], participants: 450 },
-    { id: 4, title: "BGMI Tournament", image: "/bgmi.jpeg", statusTags: ["TEAM"], participants: 600 },
-    { id: 5, title: "freefire tournament", image: "/freefire.jpg", statusTags: ["TEAM"], participants: 900 },
-    { id: 6, title: "COD tournament", image: "/bgmi.jpeg", statusTags: ["TEAM"], participants: 256 },
-    
+    {
+      id: 1,
+      title: "Valo in Action Tournament",
+      title2: "Gaming",
+      statusTags: ["ONLINE", "OPEN", "LIVE"],
+      participants: 500,
+      image:
+        "https://images.pexels.com/photos/442576/pexels-photo-442576.jpeg?auto=compress&cs=tinysrgb&w=600",
+    },
+    {
+      id: 2,
+      title: "BCCI in Action Tournament",
+      title2: "Gaming",
+      statusTags: ["ONLINE", "OPEN", "LIVE"],
+      participants: 500,
+      image:
+        "https://images.pexels.com/photos/442576/pexels-photo-442576.jpeg?auto=compress&cs=tinysrgb&w=600",
+    },
+    {
+      id: 3,
+      title: "Valo in Action Tournament",
+      title2: "Gaming",
+      statusTags: ["ONLINE", "OPEN", "LIVE"],
+      participants: 500,
+      image:
+        "https://images.pexels.com/photos/442576/pexels-photo-442576.jpeg?auto=compress&cs=tinysrgb&w=600",
+    },
+    {
+      id: 4,
+      title: "BCCI in Action Tournament",
+      title2: "Gaming",
+      statusTags: ["ONLINE", "OPEN", "LIVE"],
+      participants: 500,
+      image:
+        "https://images.pexels.com/photos/442576/pexels-photo-442576.jpeg?auto=compress&cs=tinysrgb&w=600",
+    },
   ];
 
   const pastTournaments = [
     {
-      id: 7,
-      title: "BGMI Finals",
-      title2: "Past",
-      image: "/bgmi.jpeg",
+      id: 5,
+      title: "BGMI Squad Face-Off",
+      title2: "Gaming (Past)",
+      statusTags: ["OFFLINE", "ENDED"],
       participants: 800,
-      statusTags: ["ENDED"]
+      image:
+        "https://images.pexels.com/photos/6153444/pexels-photo-6153444.jpeg?auto=compress&cs=tinysrgb&w=600",
+    },
+    {
+      id: 6,
+      title: "Free Fire Nationals",
+      title2: "Gaming (Past)",
+      statusTags: ["OFFLINE", "COMPLETED"],
+      participants: 640,
+      image:
+        "https://images.pexels.com/photos/6153448/pexels-photo-6153448.jpeg?auto=compress&cs=tinysrgb&w=600",
+    },
+    {
+      id: 7,
+      title: "Valorant Solo Clash",
+      title2: "Gaming (Past)",
+      statusTags: ["ONLINE", "ENDED"],
+      participants: 720,
+      image:
+        "https://images.pexels.com/photos/12877694/pexels-photo-12877694.jpeg?auto=compress&cs=tinysrgb&w=600",
     },
     {
       id: 8,
-      title: "Free Fire Ends",
-      title2: "Past",
-      image: "/freefire.jpg",
-      participants: 640,
-      statusTags: ["COMPLETED"]
+      title: "Call of Duty Challenge",
+      title2: "Gaming (Past)",
+      statusTags: ["ONLINE", "FINISHED"],
+      participants: 570,
+      image:
+        "https://images.pexels.com/photos/6153449/pexels-photo-6153449.jpeg?auto=compress&cs=tinysrgb&w=600",
     },
   ];
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      if (swiperRef.current?.swiper) {
-        const next = (swiperRef.current.swiper.realIndex + 1) % openTournaments.length;
-        swiperRef.current.swiper.slideToLoop(next);
-      }
-    }, 3000);
-    return () => clearInterval(interval);
-  }, [openTournaments.length]);
-
   return (
-    <div className="bg-gray-100 pt-[60px] pb-10 min-h-screen">
-      <div className="px-4 sm:px-6 md:px-10 max-w-screen-xl mx-auto">
+    <div className="bg-gray-100 py-10 min-h-screen">
+      <div className="max-w-[96%] mx-auto px-2">
 
-        {/* ✅ Swiper Slider */}
-        {openTournaments.length >= 3 && (
-          <div className="mb-12">
-            <Swiper
-              ref={swiperRef}
-              modules={[Pagination]}
-              loop={true}
-              centeredSlides={true}
-              slidesPerView={2}
-              spaceBetween={30}
-              breakpoints={{
-                0: { slidesPerView: 1 },
-                640: { slidesPerView: 1.2 },
-                1024: { slidesPerView: 2 },
-              }}
-              pagination={{
-                el: ".swiper-pagination-custom",
-                clickable: true,
-              }}
-              onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
-            >
-              {openTournaments.map((t, index) => (
-                <SwiperSlide key={t.id}>
-                  <div
-                    className={`transition-all duration-[1000ms] ease-in-out rounded-xl overflow-hidden border-2 ${
-                      activeIndex === index
-                        ? "scale-105 border-transparent shadow-[0_15px_40px_-10px_rgba(0,0,0,0.6)] z-10"
-                        : "scale-95 opacity-80 grayscale border border-gray-300 shadow-md"
-                    }`}
-                  >
-                    <img
-                      src={t.image}
-                      alt={t.title}
-                      className="w-full h-[220px] md:h-[300px] object-cover"
-                    />
-                  </div>
-                </SwiperSlide>
-              ))}
-            </Swiper>
-            <div className="swiper-pagination-custom mt-5 flex justify-center" />
-          </div>
-        )}
+        {/* 🎠 Swiper Slider Section */}
+        <div className="mb-12 relative">
+          <Swiper
+            modules={[Pagination, Autoplay]}
+            pagination={{
+              el: '.swiper-pagination-custom',
+              clickable: true,
+            }}
+            autoplay={{
+              delay: 3000,
+              disableOnInteraction: false,
+            }}
+            spaceBetween={20}
+            loop={true}
+            slidesPerView={1.2}
+            breakpoints={{
+              640: { slidesPerView: 1.2 },
+              768: { slidesPerView: 1.5 },
+              1024: { slidesPerView: 2.2 },
+            }}
+          >
+            <SwiperSlide>
+              <img
+                src="/cod.jpeg"
+                alt="COD Banner"
+                className="rounded-xl w-full object-cover h-[200px] sm:h-[250px]"
+              />
+            </SwiperSlide>
 
-        {/* ✅ OPEN Section */}
-        <section className="bg-white p-6 rounded-xl shadow mb-12">
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
-            <h2 className="text-2xl font-bold flex items-center gap-2">
-              🟢 Open Tournaments
-            </h2>
-            <a href="#" className="text-sm px-4 py-2 bg-green-100 hover:bg-green-200 rounded-full text-green-700 font-semibold">
-              View All
-            </a>
-          </div>
+            <SwiperSlide>
+              <img
+                src="/valorant.jpeg"
+                alt="Valorant Banner"
+                className="rounded-xl w-full object-cover h-[200px] sm:h-[250px]"
+              />
+            </SwiperSlide>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
-            {openTournaments.map((t) => (
-              <TournamentCard key={t.id} {...t} />
-            ))}
-          </div>
-        </section>
+            <SwiperSlide>
+              <img
+                src="/codmod.jpg"
+                alt="Slide 3"
+                className="rounded-xl w-full object-cover h-[200px] sm:h-[250px]"
+              />
+            </SwiperSlide>
 
-        {/* ✅ PAST Section */}
-        <section className="bg-gray-100 p-6 border border-gray-200 rounded-xl shadow-inner">
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
-            <h2 className="text-2xl font-bold flex items-center gap-2">
-              🕑 Past Tournaments
-            </h2>
-            <a href="#" className="text-sm px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-full text-gray-700 font-semibold">
-              See Archive
-            </a>
-          </div>
+            <SwiperSlide>
+              <img
+                src="/bgmi.jpeg"
+                alt="Slide 4"
+                className="rounded-xl w-full object-cover h-[200px] sm:h-[250px]"
+              />
+            </SwiperSlide>
+          </Swiper>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
-            {pastTournaments.map((t) => (
-              <TournamentCard key={t.id} {...t} />
-            ))}
-          </div>
-        </section>
+          {/* ✅ Display Dots Below */}
+          <div className="swiper-pagination-custom mt-4 flex justify-center"></div>
+        </div>
+
+        {/* ========================= OPEN SECTION ========================= */}
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-2xl font-bold">Open</h2>
+          <a
+            href="#"
+            className="rounded-full bg-gray-200 hover:bg-gray-300 px-4 py-2 text-sm font-medium text-black transition"
+          >
+            All Your Tournaments &gt;
+          </a>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-10 mb-16">
+          {openTournaments.map((tournament) => (
+            <TournamentCard key={tournament.id} {...tournament} />
+          ))}
+        </div>
+
+        {/* ========================= PAST SECTION ========================= */}
+        <div className="flex items-center justify-between mb-6 mt-10">
+          <h2 className="text-2xl font-bold">Past</h2>
+          <a
+            href="#"
+            className="rounded-full bg-gray-200 hover:bg-gray-300 px-4 py-2 text-sm font-medium text-black transition"
+          >
+            All Past Tournaments &gt;
+          </a>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-10">
+          {pastTournaments.map((tournament) => (
+            <TournamentCard key={tournament.id} {...tournament} />
+          ))}
+        </div>
       </div>
     </div>
   );
