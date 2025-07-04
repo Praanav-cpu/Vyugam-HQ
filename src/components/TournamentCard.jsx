@@ -1,73 +1,73 @@
-import { FaDiscord, FaInstagram } from 'react-icons/fa';
+import { FaDiscord, FaGamepad } from "react-icons/fa";
 
-
-function TournamentCard({ 
-  title, 
-  title2 = "",
-  team1, 
-  team2, 
-  viewers, 
-  timestamp, 
-  isLive = false,
-  gameImage,
-  team1Logo,
-  team2Logo 
-}) {
+const TournamentCard = ({
+  title,
+  title2 = "Gaming",
+  statusTags = [],
+  participants = 0,
+  image,
+  applyLink = "#",
+}) => {
   return (
-    <div className="bg-white rounded-lg overflow-hidden shadow-md border border-gray-200 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 min-h-[360px]">
-      {/* Tournament Image */}
-      <div className="relative h-56 overflow-hidden"> {/* height increased */}
-        <img 
-          src={gameImage} 
-          alt={title} 
-          className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+    <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-all duration-300 flex flex-col">
+      {/* Image */}
+      <div className="w-full h-[190px] sm:h-[200px] md:h-[220px] overflow-hidden">
+        <img
+          src={image}
+          alt={title}
+          className="w-full h-full object-cover grayscale transition-transform duration-500"
         />
-        {isLive && (
-          <div className="absolute top-2 left-2">
-            <span className="bg-red-600 text-white px-2 py-1 text-xs rounded">
-              LIVE
-            </span>
-          </div>
-        )}
       </div>
 
-      {/* Tournament Content */}
-      <div className="p-5"> {/* padding increased */}
-        {/* Title with optional line break */}
-        <h3 className="text-lg font-semibold text-gray-900 mb-3 leading-tight">
-          {title} {title2 && <><br />{title2}</>}
-        </h3>
-
-         {/* Icons */}
- <div className="flex items-center gap-2">
-  <a href="https://discord.com" target="_blank" rel="noopener noreferrer">
-    <FaDiscord className="w-5 h-5 text-gray-500 hover:text-blue-600 cursor-pointer" />
-  </a>
-  <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">
-    <FaInstagram className="w-5 h-5 text-gray-500 hover:text-pink-600 cursor-pointer" />
-  </a>
-</div>
-
-
-        {/* Meta Info and Actions */}
-        <div className="flex justify-between items-center mt-8">
-          <div className="flex items-center gap-3 text-xs text-gray-600 font-medium">
-            {/* <span>👁 {viewers}</span> */}
-            {/* <span>{timestamp}</span> */}
+      {/* Content */}
+      <div className="flex flex-col justify-between flex-1 px-5 py-4 relative">
+        {/* Icons */}
+        <div className="absolute top-3 right-4 flex space-x-2">
+          <div className="p-2 bg-gray-100 rounded-full hover:bg-red-100 transition cursor-pointer">
+            <FaGamepad size={14} />
           </div>
-
-          <div className="flex gap-2">
-            <button className="bg-gray-200 text-gray-800 px-3 py-1.5 rounded text-xs font-medium">
-              Follow
-            </button>
-            <button className="bg-red-500 text-white px-3 py-1.5 rounded text-xs font-medium">
-              {isLive ? 'Watch Live' : 'View Details'}
-            </button>
+          <div className="p-2 bg-gray-100 rounded-full hover:bg-blue-100 transition cursor-pointer">
+            <FaDiscord size={14} />
           </div>
+        </div>
+
+        <div>
+          {/* Title + Sub */}
+          <h3 className="font-bold text-[15px] text-gray-900">{title}</h3>
+          <p className="text-sm text-gray-500">{title2}</p>
+
+          {/* Participants */}
+          {participants > 0 && (
+            <p className="mt-2 text-sm text-orange-500 font-medium">
+              +{participants} Participating
+            </p>
+          )}
+
+          {/* Tags */}
+          <div className="flex flex-wrap gap-2 mt-3">
+            {statusTags.map((tag, index) => (
+              <span
+                key={index}
+                className="px-3 py-1 text-xs font-semibold bg-gray-100 text-gray-700 rounded-full"
+              >
+                {tag}
+              </span>
+            ))}
+          </div>
+        </div>
+
+        {/* CTA button */}
+        <div className="flex justify-end mt-3">
+          <a
+            href={applyLink}
+            className="bg-red-600 hover:bg-red-700 text-white text-sm font-semibold px-4 py-2 rounded-md transition-all"
+          >
+            Apply now
+          </a>
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
 export default TournamentCard;
