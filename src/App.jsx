@@ -6,7 +6,7 @@ import Blog from './pages/Blog'
 import Profile from './pages/Profile'
 import TournamentListPage from './components/TournamentListPage'
 import Signup from './pages/Signup'
-import SignIn from './pages/SignIn'
+import Signin from './pages/Signin'
 import EmailVerification from './pages/EmailVerification'
 import ResetPassword from './pages/ResetPassword'
 
@@ -21,7 +21,7 @@ function AppLayout() {
         <Routes>
           {/* Auth Routes */}
           <Route path="/signup" element={<Signup />} />
-          <Route path="/signin" element={<SignIn />} />
+          <Route path="/signin" element={<Signin />} />
           <Route path="/verify" element={<EmailVerification />} />
           <Route path="/reset-password" element={<ResetPassword />} />
 
