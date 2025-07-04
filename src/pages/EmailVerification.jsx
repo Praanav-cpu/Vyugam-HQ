@@ -21,7 +21,7 @@ const EmailVerification = () => {
       setLoading(true);
       setError("");
 
-      const response = await fetch("http://127.0.0.1:8000/api/user/sendcode/", {
+      const response = await fetch("https://vyugamhq-backend.onrender.com/api/user/sendcode/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email }),
@@ -47,7 +47,7 @@ const EmailVerification = () => {
       setLoading(true);
       setError("");
 
-      const response = await fetch("http://127.0.0.1:8000/api/user/verifycode/", {
+      const response = await fetch("https://vyugamhq-backend.onrender.com/api/user/verifycode/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, code }),
