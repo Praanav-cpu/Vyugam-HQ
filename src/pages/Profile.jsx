@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useState } from 'react';
 import {
   FaDiscord,
   FaInstagram,
@@ -9,7 +9,6 @@ import {
 import { Shield, MapPin } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
-// GameTag Component
 const GameTag = ({ name, variant = 'outline' }) => {
   const baseClasses =
     'px-3 py-1.5 rounded-full text-sm font-medium transition-all duration-200 hover:scale-105';
@@ -25,7 +24,6 @@ const GameTag = ({ name, variant = 'outline' }) => {
   );
 };
 
-// StatCard Component
 const StatCard = ({ number, label, bgColor, textColor }) => (
   <div
     className={`${bgColor} rounded-xl p-6 transition-all duration-300 hover:scale-105 hover:shadow-lg cursor-pointer`}
@@ -41,7 +39,6 @@ const StatCard = ({ number, label, bgColor, textColor }) => (
   </div>
 );
 
-// StatsGrid Component
 const StatsGrid = () => {
   const stats = [
     { number: '7', label: 'Winner', bgColor: 'bg-white', textColor: 'text-gray-900' },
@@ -58,15 +55,57 @@ const StatsGrid = () => {
   );
 };
 
-// ProfileCard Component
+// ProfileCard with editable banner
 const ProfileCard = () => {
-  const navigate = useNavigate(); // ✅ Initialize useNavigate
+  const navigate = useNavigate();
+  const fileInputRef = useRef(null);
+  const [bannerImage, setBannerImage] = useState(
+    'https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=400'
+  );
+
+  const handleBannerChange = (event) => {
+    const file = event.target.files[0];
+    if (file && file.type.startsWith('image/')) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setBannerImage(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const triggerBannerUpload = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
+  };
 
   return (
     <>
       <div className="bg-white rounded-xl shadow-lg overflow-hidden relative">
         {/* Banner */}
-        <div className="relative h-40 bg-gradient-to-r from-orange-400 via-orange-500 to-gray-800">
+        <div
+          className="relative h-40 bg-cover bg-center"
+          style={{
+            backgroundImage: `url(${bannerImage})`,
+          }}
+        >
+          {/* Edit banner button */}
+          <input
+            type="file"
+            accept="image/*"
+            ref={fileInputRef}
+            onChange={handleBannerChange}
+            className="hidden"
+          />
+
+          <button
+            onClick={triggerBannerUpload}
+            className="absolute top-2 right-2 bg-white/80 p-2 rounded-full shadow hover:bg-white transition"
+          >
+            <FaEdit className="text-gray-700" size={16} />
+          </button>
+
           {/* Avatar */}
           <div className="absolute bottom-[-40px] left-6 z-10">
             <div className="relative">
@@ -87,9 +126,7 @@ const ProfileCard = () => {
           {/* Name & Socials */}
           <div className="mb-4 flex flex-col sm:flex-row sm:items-center sm:justify-between">
             <div>
-              <h1 className="text-xl font-bold text-gray-900 mb-0.5">
-                Ayush Thakre
-              </h1>
+              <h1 className="text-xl font-bold text-gray-900 mb-0.5">Ayush Thakre</h1>
               <p className="text-gray-600 text-sm">@Ayush.Thakre</p>
             </div>
             <div className="flex mt-2 sm:mt-0 space-x-2">
@@ -105,7 +142,6 @@ const ProfileCard = () => {
               <div className="w-9 h-9 bg-gray-100 rounded-full flex items-center justify-center text-gray-800 shadow hover:bg-gray-200 transition">
                 <FaShareAlt size={16} />
               </div>
-              {/* ✅ Edit Profile Button with Navigation */}
               <button
                 onClick={() => navigate('/edit-profile')}
                 className="flex items-center space-x-1 bg-gray-100 text-gray-800 px-3 py-1.5 rounded-lg hover:bg-gray-200 transition-all duration-200 border border-gray-300 text-xs shadow"
@@ -171,7 +207,6 @@ const ProfileCard = () => {
   );
 };
 
-// Main Profile Layout
 const Profile = () => {
   return (
     <div className="min-h-screen bg-gray-100 pt-24 px-4 sm:px-6 lg:px-8">

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import VyugamLogo from "../assets/vyugamHQ.png";
+import VyugamLogo from  "../assets/vyugamHQ.png";
 import { useAuth } from "../context/AuthContext";
 
 const Signup = () => {
@@ -42,7 +42,7 @@ const Signup = () => {
     setLoading(true);
 
     try {
-      const response = await fetch("http://127.0.0.1:8000/api/user/completeregistration/", {
+      const response = await fetch("https://vyugamhq-backend.onrender.com/api/user/completeregistration/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
