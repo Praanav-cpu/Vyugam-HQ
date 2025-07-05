@@ -1,143 +1,227 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 
 const EditProfile = () => {
   const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
+    first_name: "",
+    last_name: "",
     phone: "",
     gender: "",
     city: "",
     state: "",
-    bio: "",           // short status, under name
-    about: "",         // full about section under image
+    bio: "",
+    about: "",
+    profile_pic: null,
     degree: "",
     institute: "",
     noEducation: false,
-    gamingExp: "",
+    gaming_experience: "",
     instagram: "",
     discord: "",
-    twitter: "",
-    profileImage: "",
+    x_url: "",
   });
 
+  const [previewPic, setPreviewPic] = useState("");
+  const [loading, setLoading] = useState(false);
   const fileInputRef = useRef(null);
 
+  const token = localStorage.getItem("access_token");
+
+  // Fetch profile data from backend
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const headers = { Authorization: `Bearer ${token}` };
+        const [aboutRes, eduRes, expRes, socialRes] = await Promise.all([
+          fetch("https://vyugamhq-backend.onrender.com/api/profile/about/", { headers }),
+          fetch("https://vyugamhq-backend.onrender.com/api/profile/education/", { headers }),
+          fetch("https://vyugamhq-backend.onrender.com/api/profile/experience/", { headers }),
+          fetch("https://vyugamhq-backend.onrender.com/api/profile/socials/", { headers }),
+        ]);
+
+        if (aboutRes.ok) {
+          const about = await aboutRes.json();
+          setFormData((prev) => ({
+            ...prev,
+            ...about,
+            profile_pic: null,
+          }));
+          setPreviewPic(about.profile_pic);
+        }
+
+        if (eduRes.ok) {
+          const edu = await eduRes.json();
+          setFormData((prev) => ({
+            ...prev,
+            degree: edu.degree,
+            institute: edu.institute,
+            noEducation: !edu.degree && !edu.institute,
+          }));
+        }
+
+        if (expRes.ok) {
+          const exp = await expRes.json();
+          setFormData((prev) => ({
+            ...prev,
+            gaming_experience: exp.gaming_experience,
+          }));
+        }
+
+        if (socialRes.ok) {
+          const socials = await socialRes.json();
+          setFormData((prev) => ({
+            ...prev,
+            instagram: socials.instagram,
+            discord: socials.discord,
+            x_url: socials.x_url,
+          }));
+        }
+      } catch (err) {
+        console.error("Fetch error:", err);
+      }
+    };
+
+    fetchData();
+  }, [token]);
+
+  // Input change handler
   const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: type === "checkbox" ? checked : value,
-    }));
-  };
+    const { name, value, type, checked, files } = e.target;
 
-  const handleImageUpload = (e) => {
-    const file = e.target.files[0];
-    if (file && file.type.startsWith("image/")) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setFormData((prev) => ({ ...prev, profileImage: reader.result }));
-      };
-      reader.readAsDataURL(file);
+    if (type === "file") {
+      const file = files[0];
+      if (file) {
+        setFormData((prev) => ({ ...prev, profile_pic: file }));
+        setPreviewPic(URL.createObjectURL(file));
+      }
+    } else {
+      setFormData((prev) => ({
+        ...prev,
+        [name]: type === "checkbox" ? checked : value,
+      }));
     }
   };
 
-  const triggerFileSelect = () => {
-    if (fileInputRef.current) {
-      fileInputRef.current.click();
-    }
-  };
+  const saveChanges = async () => {
+    try {
+      setLoading(true);
+      const authHeader = { Authorization: `Bearer ${token}` };
 
-  const saveChanges = () => {
-    console.log("Saved form data:", formData);
-    // Add your API integration logic here
+      const aboutForm = new FormData();
+      Object.entries({
+        first_name: formData.first_name,
+        last_name: formData.last_name,
+        phone: formData.phone,
+        gender: formData.gender,
+        city: formData.city,
+        state: formData.state,
+        bio: formData.bio,
+        about: formData.about,
+      }).forEach(([key, val]) => aboutForm.append(key, val));
+
+      if (formData.profile_pic) {
+        aboutForm.append("profile_pic", formData.profile_pic);
+      }
+
+      await Promise.all([
+        fetch("https://vyugamhq-backend.onrender.com/api/profile/about/", {
+          method: "PUT",
+          headers: authHeader,
+          body: aboutForm,
+        }),
+        fetch("https://vyugamhq-backend.onrender.com/api/profile/education/", {
+          method: "PUT",
+          headers: {
+            ...authHeader,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            degree: formData.noEducation ? "" : formData.degree,
+            institute: formData.noEducation ? "" : formData.institute,
+          }),
+        }),
+        fetch("https://vyugamhq-backend.onrender.com/api/profile/experience/", {
+          method: "PUT",
+          headers: {
+            ...authHeader,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            gaming_experience: formData.gaming_experience,
+          }),
+        }),
+        fetch("https://vyugamhq-backend.onrender.com/api/profile/socials/", {
+          method: "PUT",
+          headers: {
+            ...authHeader,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            instagram: formData.instagram,
+            discord: formData.discord,
+            x_url: formData.x_url,
+          }),
+        }),
+      ]);
+
+      alert("Profile updated successfully!");
+    } catch (err) {
+      console.error("Update error:", err);
+      alert("Update failed.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const gamingOptions = [
-    "Less than a year",
-    "1 - 3 years",
-    "4 - 10 years",
-    "10+ years (Veteran)",
+    { value: "<1", label: "Less than a year" },
+    { value: "1-3", label: "1 - 3 years" },
+    { value: "4-10", label: "4 - 10 years" },
+    { value: "10+", label: "10+ years (Veteran)" },
   ];
-
-  const aboutRef = useRef(null);
-  const educationRef = useRef(null);
-  const experienceRef = useRef(null);
-  const socialsRef = useRef(null);
-
-  const handleScrollTo = (ref) => {
-    if (ref?.current) {
-      ref.current.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
-  };
 
   return (
     <div className="min-h-screen bg-white text-black pt-[100px] px-4 pb-20">
-      {/* Tabs */}
       <div className="max-w-6xl mx-auto flex items-center justify-between mb-6">
-        <div className="flex space-x-4 overflow-x-auto">
-          {[
-            { label: "About", ref: aboutRef },
-            { label: "Education", ref: educationRef },
-            { label: "Experience", ref: experienceRef },
-            { label: "Socials", ref: socialsRef },
-          ].map(({ label, ref }) => (
-            <button
-              key={label}
-              onClick={() => handleScrollTo(ref)}
-              className="px-4 py-2 rounded-md font-medium border bg-gray-100 text-gray-700 hover:bg-gray-200 transition"
-            >
-              {label}
-            </button>
-          ))}
-        </div>
+        <h2 className="text-xl font-semibold">Edit Profile</h2>
         <button
           onClick={saveChanges}
           className="bg-red-500 text-white font-semibold px-6 py-2 rounded-lg hover:bg-red-600"
         >
-          Save
+          {loading ? "Saving..." : "Save"}
         </button>
       </div>
 
-      {/* Page Grid */}
       <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Left (Main Content) */}
+        {/* LEFT SIDE */}
         <div className="col-span-2 space-y-6">
-          {/* ABOUT */}
-          <div
-            ref={aboutRef}
-            className="scroll-mt-28 bg-white border rounded-lg shadow-sm p-6 space-y-4"
-          >
-            <h2 className="text-lg font-bold text-red-600 mb-3">Basic Info</h2>
+          <div className="bg-white border rounded-lg shadow-sm p-6 space-y-4">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <input
-                type="text"
-                name="firstName"
-                className="w-full border border-gray-300 px-4 py-2 rounded-md"
+                name="first_name"
                 placeholder="First Name"
-                value={formData.firstName}
+                value={formData.first_name}
                 onChange={handleChange}
+                className="border px-4 py-2 rounded-md"
               />
               <input
-                type="text"
-                name="lastName"
-                className="w-full border border-gray-300 px-4 py-2 rounded-md"
+                name="last_name"
                 placeholder="Last Name"
-                value={formData.lastName}
+                value={formData.last_name}
                 onChange={handleChange}
+                className="border px-4 py-2 rounded-md"
               />
               <input
-                type="text"
                 name="phone"
-                className="col-span-2 border border-gray-300 px-4 py-2 rounded-md"
                 placeholder="Phone Number"
                 value={formData.phone}
                 onChange={handleChange}
+                className="col-span-2 border px-4 py-2 rounded-md"
               />
               <select
                 name="gender"
-                className="w-full border border-gray-300 px-4 py-2 rounded-md"
                 value={formData.gender}
                 onChange={handleChange}
+                className="border px-4 py-2 rounded-md"
               >
                 <option value="">Select Gender</option>
                 <option>Male</option>
@@ -145,137 +229,118 @@ const EditProfile = () => {
                 <option>Other</option>
               </select>
               <input
-                type="text"
                 name="city"
                 placeholder="City"
-                className="w-full border border-gray-300 px-4 py-2 rounded-md"
                 value={formData.city}
                 onChange={handleChange}
+                className="border px-4 py-2 rounded-md"
               />
               <input
-                type="text"
                 name="state"
                 placeholder="State"
-                className="w-full border border-gray-300 px-4 py-2 rounded-md"
                 value={formData.state}
                 onChange={handleChange}
+                className="border px-4 py-2 rounded-md"
               />
-            </div>
-
-            {/* Keep bio under this section */}
-            <div>
-              <label className="text-sm font-medium text-gray-700">Bio </label>
               <textarea
                 name="bio"
-                rows={3}
-                placeholder="Short intro or gaming title i.e. Diamond IV BGMI"
-                className="w-full border border-gray-300 px-3 py-2 mt-1 rounded-md"
+                placeholder="Short Bio (Gaming title, etc.)"
+                rows={2}
                 value={formData.bio}
                 onChange={handleChange}
+                className="col-span-2 border px-4 py-2 rounded-md"
               />
             </div>
           </div>
 
-          {/* EDUCATION */}
-          <div
-            ref={educationRef}
-            className="scroll-mt-28 bg-white border rounded-lg shadow-sm p-6 space-y-4"
-          >
-            <h2 className="text-lg font-bold text-red-600 mb-3">Education</h2>
-            <div className="flex justify-between items-center">
-              <label className="text-sm font-medium">Degree</label>
-              <label className="flex items-center gap-2 text-sm">
+          {/* Education */}
+          <div className="bg-white border rounded-lg shadow-sm p-6">
+            <label className="flex items-center justify-between mb-2 font-medium text-sm">
+              Degree
+              <span>
                 No Formal Education
                 <input
                   type="checkbox"
                   name="noEducation"
                   checked={formData.noEducation}
                   onChange={handleChange}
+                  className="ml-2"
                 />
-              </label>
-            </div>
+              </span>
+            </label>
             {!formData.noEducation && (
               <>
                 <input
-                  type="text"
                   name="degree"
-                  placeholder="Degree"
-                  className="w-full border border-gray-300 px-3 py-2 rounded"
                   value={formData.degree}
                   onChange={handleChange}
+                  className="border px-4 py-2 rounded-md mb-2 w-full"
+                  placeholder="Degree"
                 />
                 <input
-                  type="text"
                   name="institute"
-                  placeholder="Institution"
-                  className="w-full border border-gray-300 px-3 py-2 rounded"
                   value={formData.institute}
                   onChange={handleChange}
+                  className="border px-4 py-2 rounded-md w-full"
+                  placeholder="Institute"
                 />
               </>
             )}
           </div>
 
-          {/* EXPERIENCE */}
-          <div
-            ref={experienceRef}
-            className="scroll-mt-28 bg-white border rounded-lg shadow-sm p-6 space-y-4"
-          >
-            <h2 className="text-lg font-bold text-red-600 mb-3">Experience</h2>
-            <label className="text-sm font-medium">Gaming Experience</label>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {gamingOptions.map((option, i) => (
-                <label key={i} className="flex items-center gap-2 text-sm">
-                  <input
-                    type="radio"
-                    name="gamingExp"
-                    value={option}
-                    checked={formData.gamingExp === option}
-                    onChange={handleChange}
-                  />
-                  {option}
-                </label>
-              ))}
-            </div>
+          {/* Gaming Experience */}
+          <div className="bg-white border rounded-lg shadow-sm p-6">
+            <label className="block mb-2 font-medium text-sm">
+              Gaming Experience
+            </label>
+            {gamingOptions.map((opt, i) => (
+              <label key={i} className="flex items-center mb-1 text-sm">
+                <input
+                  type="radio"
+                  name="gaming_experience"
+                  value={opt.value}
+                  checked={formData.gaming_experience === opt.value}
+                  onChange={handleChange}
+                  className="mr-2"
+                />
+                {opt.label}
+              </label>
+            ))}
           </div>
 
-          {/* SOCIALS */}
-          <div
-            ref={socialsRef}
-            className="scroll-mt-28 bg-white border rounded-lg shadow-sm p-6 space-y-4"
-          >
-            <h2 className="text-lg font-bold text-red-600 mb-3">Social Links</h2>
+          {/* Socials */}
+          <div className="bg-white border rounded-lg shadow-sm p-6 space-y-3">
             <input
               name="instagram"
               placeholder="Instagram"
-              className="w-full border border-gray-300 rounded px-3 py-2"
               value={formData.instagram}
               onChange={handleChange}
+              className="border px-4 py-2 rounded-md w-full"
             />
             <input
               name="discord"
               placeholder="Discord"
-              className="w-full border border-gray-300 rounded px-3 py-2"
               value={formData.discord}
               onChange={handleChange}
+              className="border px-4 py-2 rounded-md w-full"
             />
             <input
-              name="twitter"
+              name="x_url"
               placeholder="X / Twitter"
-              className="w-full border border-gray-300 rounded px-3 py-2"
-              value={formData.twitter}
+              value={formData.x_url}
               onChange={handleChange}
+              className="border px-4 py-2 rounded-md w-full"
             />
           </div>
         </div>
 
-        {/* Right Panel - Avatar + About Me */}
+        {/* RIGHT SIDE */}
         <div className="space-y-6">
           <div className="bg-white border rounded-lg shadow-sm p-6 text-center">
             <div className="mx-auto w-28 h-28 rounded-full border overflow-hidden mb-4">
               <img
                 src={
-                  formData.profileImage ||
+                  previewPic ||
                   "https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg"
                 }
                 alt="Avatar"
@@ -285,29 +350,29 @@ const EditProfile = () => {
 
             <input
               type="file"
+              name="profile_pic"
               ref={fileInputRef}
               accept="image/*"
-              onChange={handleImageUpload}
+              onChange={handleChange}
               className="hidden"
             />
             <button
-              onClick={triggerFileSelect}
+              onClick={() => fileInputRef.current?.click()}
               className="bg-gray-100 font-semibold text-sm px-4 py-2 rounded-full hover:bg-gray-200 transition"
             >
               Upload
             </button>
           </div>
 
-          {/* About Me Section */}
-          <div className="bg-white border rounded-lg shadow-sm p-4">
-            <label className="text-sm font-semibold">About Me</label>
+          {/* About Me */}
+          <div className="bg-white border rounded-lg shadow-sm p-6">
+            <label className="text-sm font-medium mb-1 block">About Me</label>
             <textarea
               name="about"
               rows={5}
-              className="w-full border border-gray-300 mt-2 px-3 py-2 rounded-md"
+              className="w-full border border-gray-300 rounded-md px-3 py-2"
               value={formData.about}
               onChange={handleChange}
-              placeholder="Tell us more about your skills, gaming highlights, passions..."
             />
           </div>
         </div>

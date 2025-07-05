@@ -43,7 +43,8 @@ function AppContent() {
           {/* 🏠 Main App Pages */}
           <Route path="/" element={<Home />} />
           <Route path="/blog" element={<Blog />} />
-          <Route path="/profile" element={<Profile />} />
+          <Route path="/profile" element={<Profile />} /> 
+          <Route path="/profile/:username" element={<Profile />} /> // for public profiles
           <Route path="/edit-profile" element={<EditProfile />} />
           <Route path="/tournaments" element={<TournamentListPage />} />
         </Routes>
