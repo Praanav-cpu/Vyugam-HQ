@@ -24,11 +24,11 @@ const Header = () => {
   };
 
   const handleSignupRedirect = () => {
-    navigate("/verify"); // ✅ Redirect to EmailVerification page
+    navigate("/verify");
   };
 
-  // Pages where search + tabs should be hidden
-  const hideTabsAndSearch = ["/signin", "/signup", "/verify"];
+  // 🛑 Hide tabs + search bar on these routes
+  const hideTabsAndSearch = ["/signin", "/signup", "/verify", "/profile"];
 
   return (
     <>
@@ -39,9 +39,15 @@ const Header = () => {
           <div className="flex items-center gap-10">
             <img src={VyugamLogo} alt="Vyugam Logo" className="w-10 h-10" />
             <nav className="hidden md:flex gap-6 text-base font-medium">
-              <Link to="/" className="text-gray-600 hover:text-red-600 transition">Home</Link>
-              <Link to="/blog" className="text-gray-600 hover:text-red-600 transition">Blog</Link>
-              <Link to="/profile" className="text-gray-600 hover:text-red-600 transition">Profile</Link>
+              <Link to="/" className="text-gray-600 hover:text-red-600 transition">
+                Home
+              </Link>
+              <Link to="/blog" className="text-gray-600 hover:text-red-600 transition">
+                Blog
+              </Link>
+              <Link to="/profile" className="text-gray-600 hover:text-red-600 transition">
+                Profile
+              </Link>
             </nav>
           </div>
 
@@ -71,7 +77,9 @@ const Header = () => {
               </div>
             ) : (
               <>
-                <Link to="/signin" className="text-sm font-semibold hover:text-red-500 transition">Sign In</Link>
+                <Link to="/signin" className="text-sm font-semibold hover:text-red-500 transition">
+                  Sign In
+                </Link>
                 <button
                   onClick={handleSignupRedirect}
                   className="text-sm bg-red-100 text-red-600 px-3 py-1 rounded-md hover:bg-red-200 transition"
@@ -84,7 +92,7 @@ const Header = () => {
         </div>
       </div>
 
-      {/* ✅ TABS + SEARCH (conditionally hidden) */}
+      {/* 🛑 REMOVE TABS + SEARCH on certain pages */}
       {!hideTabsAndSearch.includes(location.pathname) && (
         <div className="pt-[106px] bg-white">
           {/* Tabs */}
