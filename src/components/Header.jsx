@@ -28,7 +28,7 @@ const Header = () => {
   };
 
   // 🛑 Hide tabs + search bar on these routes
-  const hideTabsAndSearch = ["/signin", "/signup", "/verify", "/profile"];
+  const hideTabsAndSearch = ["/signin", "/signup", "/verify", "/profile", "/edit-profile"];
 
   return (
     <>

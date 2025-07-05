@@ -90,79 +90,92 @@ const Signin = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center px-4 pt-[100px] bg-white">
-      <img src={VyugamLogo} alt="Vyugam Logo" className="w-40 mb-6" />
+    <div className="min-h-screen w-full relative flex items-center justify-center bg-cover bg-center bg-no-repeat px-4 pt-[100px]"
+      style={{
+        backgroundImage: "url('/sigin bg.jpg')",
+      }}
+    >
 
-      <form
-        onSubmit={handleSubmit}
-        className="w-full max-w-md bg-white border border-gray-300 rounded-2xl shadow-lg p-8 space-y-6"
-      >
-        <div>
-          <label className="block text-sm font-semibold mb-1">Email</label>
-          <input
-            type="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            required
-            className="w-full border border-gray-300 rounded-md px-3 py-2"
-          />
+      {/* Overlay to darken background slightly */}
+      <div className="absolute inset-0 bg-black bg-opacity-70 z-0" />
+
+      {/* Content (Form) */}
+      <div className="z-10 w-full max-w-md">
+        <div className="flex justify-center">
+          <img src={VyugamLogo} alt="Vyugam Logo" className="w-40 mb-6" />
         </div>
 
-        <div>
-          <label className="block text-sm font-semibold mb-1">Password</label>
-          <input
-            type="password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-            required
-            className="w-full border border-gray-300 rounded-md px-3 py-2"
-          />
-        </div>
-
-        {error && <p className="text-sm text-red-500">{error}</p>}
-
-        <div className="flex justify-between items-center text-sm text-gray-600">
-          <label className="flex items-center">
+        <form
+          onSubmit={handleSubmit}
+          className="w-full bg-white/90 border border-gray-200 rounded-2xl shadow-lg p-8 space-y-6 backdrop-blur-md"
+        >
+          <div>
+            <label className="block text-sm font-semibold mb-1">Email</label>
             <input
-              type="checkbox"
-              name="remember"
-              checked={formData.remember}
+              type="email"
+              name="email"
+              value={formData.email}
               onChange={handleChange}
-              className="mr-2"
+              required
+              className="w-full border border-gray-300 rounded-md px-3 py-2"
             />
-            Remember me
-          </label>
+          </div>
+
+          <div>
+            <label className="block text-sm font-semibold mb-1">Password</label>
+            <input
+              type="password"
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+              required
+              className="w-full border border-gray-300 rounded-md px-3 py-2"
+            />
+          </div>
+
+          {error && <p className="text-sm text-red-500">{error}</p>}
+
+          <div className="flex justify-between items-center text-sm text-gray-600">
+            <label className="flex items-center">
+              <input
+                type="checkbox"
+                name="remember"
+                checked={formData.remember}
+                onChange={handleChange}
+                className="mr-2"
+              />
+              Remember me
+            </label>
+
+            <button
+              type="button"
+              onClick={() => setShowResetModal(true)}
+              className="text-blue-600 hover:underline"
+            >
+              Forgot Password?
+            </button>
+          </div>
 
           <button
-            type="button"
-            onClick={() => setShowResetModal(true)}
-            className="text-blue-600 hover:underline"
+            type="submit"
+            disabled={loading}
+            className="w-full bg-red-600 hover:bg-red-700 text-white font-semibold py-2 rounded-md transition"
           >
-            Forgot Password?
+            {loading ? "Signing in..." : "Sign In"}
           </button>
-        </div>
 
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-full bg-red-600 hover:bg-red-700 text-white font-semibold py-2 rounded-md transition"
-        >
-          {loading ? "Signing in..." : "Sign In"}
-        </button>
-
-        <p className="text-center text-xs text-gray-500 mt-2">
-          By signing in, you agree to our{" "}
-          <a href="#" className="text-blue-600 underline">Terms & Conditions</a> and{" "}
-          <a href="#" className="text-red-500 underline">Privacy Policy</a>.
-        </p>
-      </form>
+          <p className="text-center text-xs text-gray-500 mt-2">
+            By signing in, you agree to our{" "}
+            <a href="#" className="text-blue-600 underline">Terms & Conditions</a> and{" "}
+            <a href="#" className="text-red-500 underline">Privacy Policy</a>.
+          </p>
+        </form>
+      </div>
 
       {/* 🔐 Forgot Password Modal */}
       {showResetModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center px-4">
-          <div className="w-full max-w-md bg-white p-6 rounded-xl shadow-lg space-y-4 relative">
+        <div className="fixed inset-0 bg-black bg-opacity-60 z-50 flex items-center justify-center px-4">
+          <div className="w-full max-w-md bg-white p-6 rounded-xl shadow-2xl space-y-4 relative z-50">
             <button
               onClick={() => setShowResetModal(false)}
               className="absolute top-2 right-4 text-gray-400 hover:text-red-500 text-xl"
@@ -170,7 +183,7 @@ const Signin = () => {
               ×
             </button>
 
-            <h2 className="text-xl font-semibold">Forgot your password?</h2>
+            <h2 className="text-xl font-semibold text-gray-800">Forgot your password?</h2>
             <p className="text-sm text-gray-500">
               Enter your registered email and we’ll send a reset link.
             </p>

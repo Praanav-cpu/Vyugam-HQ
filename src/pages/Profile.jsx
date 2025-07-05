@@ -1,23 +1,42 @@
 import React from 'react';
-import { FaDiscord, FaInstagram, FaTwitter, FaShareAlt, FaEdit } from 'react-icons/fa';
+import {
+  FaDiscord,
+  FaInstagram,
+  FaTwitter,
+  FaShareAlt,
+  FaEdit,
+} from 'react-icons/fa';
 import { Shield, MapPin } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 // GameTag Component
 const GameTag = ({ name, variant = 'outline' }) => {
-  const baseClasses = "px-3 py-1.5 rounded-full text-sm font-medium transition-all duration-200 hover:scale-105";
+  const baseClasses =
+    'px-3 py-1.5 rounded-full text-sm font-medium transition-all duration-200 hover:scale-105';
   const variants = {
-    outline: "border border-gray-300 text-gray-700 hover:border-orange-400 hover:text-orange-600 bg-white",
-    primary: "bg-black text-white hover:bg-gray-800"
+    outline:
+      'border border-gray-300 text-gray-700 hover:border-orange-400 hover:text-orange-600 bg-white',
+    primary: 'bg-black text-white hover:bg-gray-800',
   };
-  return <span className={`${baseClasses} ${variants[variant]} cursor-pointer`}>{name}</span>;
+  return (
+    <span className={`${baseClasses} ${variants[variant]} cursor-pointer`}>
+      {name}
+    </span>
+  );
 };
 
 // StatCard Component
 const StatCard = ({ number, label, bgColor, textColor }) => (
-  <div className={`${bgColor} rounded-xl p-6 transition-all duration-300 hover:scale-105 hover:shadow-lg cursor-pointer`}>
+  <div
+    className={`${bgColor} rounded-xl p-6 transition-all duration-300 hover:scale-105 hover:shadow-lg cursor-pointer`}
+  >
     <div className="text-center">
-      <div className={`text-5xl font-extrabold ${textColor} mb-2`}>{number}</div>
-      <div className={`text-xl font-semibold ${textColor} opacity-90`}>{label}</div>
+      <div className={`text-5xl font-extrabold ${textColor} mb-2`}>
+        {number}
+      </div>
+      <div className={`text-xl font-semibold ${textColor} opacity-90`}>
+        {label}
+      </div>
     </div>
   </div>
 );
@@ -25,9 +44,9 @@ const StatCard = ({ number, label, bgColor, textColor }) => (
 // StatsGrid Component
 const StatsGrid = () => {
   const stats = [
-    { number: "7", label: "Winner", bgColor: "bg-white", textColor: "text-gray-900" },
-    { number: "5", label: "Tournament", bgColor: "bg-white", textColor: "text-gray-900" },
-    { number: "7", label: "Organized", bgColor: "bg-white", textColor: "text-gray-900" }
+    { number: '7', label: 'Winner', bgColor: 'bg-white', textColor: 'text-gray-900' },
+    { number: '5', label: 'Tournament', bgColor: 'bg-white', textColor: 'text-gray-900' },
+    { number: '7', label: 'Organized', bgColor: 'bg-white', textColor: 'text-gray-900' },
   ];
 
   return (
@@ -41,6 +60,8 @@ const StatsGrid = () => {
 
 // ProfileCard Component
 const ProfileCard = () => {
+  const navigate = useNavigate(); // ✅ Initialize useNavigate
+
   return (
     <>
       <div className="bg-white rounded-xl shadow-lg overflow-hidden relative">
@@ -66,7 +87,9 @@ const ProfileCard = () => {
           {/* Name & Socials */}
           <div className="mb-4 flex flex-col sm:flex-row sm:items-center sm:justify-between">
             <div>
-              <h1 className="text-xl font-bold text-gray-900 mb-0.5">Ayush Thakre</h1>
+              <h1 className="text-xl font-bold text-gray-900 mb-0.5">
+                Ayush Thakre
+              </h1>
               <p className="text-gray-600 text-sm">@Ayush.Thakre</p>
             </div>
             <div className="flex mt-2 sm:mt-0 space-x-2">
@@ -82,7 +105,11 @@ const ProfileCard = () => {
               <div className="w-9 h-9 bg-gray-100 rounded-full flex items-center justify-center text-gray-800 shadow hover:bg-gray-200 transition">
                 <FaShareAlt size={16} />
               </div>
-              <button className="flex items-center space-x-1 bg-gray-100 text-gray-800 px-3 py-1.5 rounded-lg hover:bg-gray-200 transition-all duration-200 border border-gray-300 text-xs shadow">
+              {/* ✅ Edit Profile Button with Navigation */}
+              <button
+                onClick={() => navigate('/edit-profile')}
+                className="flex items-center space-x-1 bg-gray-100 text-gray-800 px-3 py-1.5 rounded-lg hover:bg-gray-200 transition-all duration-200 border border-gray-300 text-xs shadow"
+              >
                 <FaEdit size={12} />
                 <span>Edit Profile</span>
               </button>
@@ -100,7 +127,9 @@ const ProfileCard = () => {
           {/* Location */}
           <div className="flex items-center space-x-2 mb-4">
             <MapPin className="w-4 h-4 text-gray-500" />
-            <span className="text-gray-600 text-sm">Nagpur, Maha Rashtra, India</span>
+            <span className="text-gray-600 text-sm">
+              Nagpur, Maha Rashtra, India
+            </span>
           </div>
 
           {/* Game Tags */}
@@ -117,10 +146,25 @@ const ProfileCard = () => {
       <div className="bg-gray-50 rounded-lg shadow-2xl p-4 mt-4">
         <h2 className="text-base font-bold text-gray-900 mb-3">About</h2>
         <div className="space-y-2 text-gray-700 text-sm">
-          <div className="flex items-start space-x-2"><span>🎮</span><span>BGMI Warrior | Clutch Master | Squad Leader</span></div>
-          <div className="flex items-start space-x-2"><span>🔥</span><span>Passionate gamer with sharp reflexes and a love for intense last-zone battles.</span></div>
-          <div className="flex items-start space-x-2"><span>⚡</span><span>Always ready to drop into Erangel & dominate!</span></div>
-          <div className="flex items-start space-x-2"><span>⭐</span><span>Let's squad up and push the limits together!</span></div>
+          <div className="flex items-start space-x-2">
+            <span>🎮</span>
+            <span>BGMI Warrior | Clutch Master | Squad Leader</span>
+          </div>
+          <div className="flex items-start space-x-2">
+            <span>🔥</span>
+            <span>
+              Passionate gamer with sharp reflexes and a love for intense
+              last-zone battles.
+            </span>
+          </div>
+          <div className="flex items-start space-x-2">
+            <span>⚡</span>
+            <span>Always ready to drop into Erangel & dominate!</span>
+          </div>
+          <div className="flex items-start space-x-2">
+            <span>⭐</span>
+            <span>Let's squad up and push the limits together!</span>
+          </div>
         </div>
       </div>
     </>
