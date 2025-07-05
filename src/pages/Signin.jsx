@@ -93,7 +93,10 @@ const Signin = () => {
     <div className="min-h-screen flex flex-col items-center justify-center px-4 pt-[100px] bg-white">
       <img src={VyugamLogo} alt="Vyugam Logo" className="w-40 mb-6" />
 
-      <form onSubmit={handleSubmit} className="w-full max-w-md bg-white border border-gray-300 rounded-2xl shadow-lg p-8 space-y-6">
+      <form
+        onSubmit={handleSubmit}
+        className="w-full max-w-md bg-white border border-gray-300 rounded-2xl shadow-lg p-8 space-y-6"
+      >
         <div>
           <label className="block text-sm font-semibold mb-1">Email</label>
           <input
@@ -132,12 +135,20 @@ const Signin = () => {
             Remember me
           </label>
 
-          <button type="button" onClick={() => setShowResetModal(true)} className="text-blue-600 hover:underline">
+          <button
+            type="button"
+            onClick={() => setShowResetModal(true)}
+            className="text-blue-600 hover:underline"
+          >
             Forgot Password?
           </button>
         </div>
 
-        <button type="submit" disabled={loading} className="w-full bg-red-600 hover:bg-red-700 text-white font-semibold py-2 rounded-md transition">
+        <button
+          type="submit"
+          disabled={loading}
+          className="w-full bg-red-600 hover:bg-red-700 text-white font-semibold py-2 rounded-md transition"
+        >
           {loading ? "Signing in..." : "Sign In"}
         </button>
 
@@ -152,10 +163,17 @@ const Signin = () => {
       {showResetModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center px-4">
           <div className="w-full max-w-md bg-white p-6 rounded-xl shadow-lg space-y-4 relative">
-            <button onClick={() => setShowResetModal(false)} className="absolute top-2 right-4 text-gray-400 hover:text-red-500 text-xl">×</button>
+            <button
+              onClick={() => setShowResetModal(false)}
+              className="absolute top-2 right-4 text-gray-400 hover:text-red-500 text-xl"
+            >
+              ×
+            </button>
 
             <h2 className="text-xl font-semibold">Forgot your password?</h2>
-            <p className="text-sm text-gray-500">Enter your registered email and we’ll send a reset link.</p>
+            <p className="text-sm text-gray-500">
+              Enter your registered email and we’ll send a reset link.
+            </p>
 
             <input
               type="email"

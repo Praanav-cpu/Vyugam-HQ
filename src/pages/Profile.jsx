@@ -12,7 +12,7 @@ const GameTag = ({ name, variant = 'outline' }) => {
   return <span className={`${baseClasses} ${variants[variant]} cursor-pointer`}>{name}</span>;
 };
 
-// StatCard Component (Enlarged)
+// StatCard Component
 const StatCard = ({ number, label, bgColor, textColor }) => (
   <div className={`${bgColor} rounded-xl p-6 transition-all duration-300 hover:scale-105 hover:shadow-lg cursor-pointer`}>
     <div className="text-center">
@@ -46,7 +46,7 @@ const ProfileCard = () => {
       <div className="bg-white rounded-xl shadow-lg overflow-hidden relative">
         {/* Banner */}
         <div className="relative h-40 bg-gradient-to-r from-orange-400 via-orange-500 to-gray-800">
-          {/* Avatar (overlapping) */}
+          {/* Avatar */}
           <div className="absolute bottom-[-40px] left-6 z-10">
             <div className="relative">
               <div className="w-20 h-20 rounded-full border-4 border-white shadow-lg overflow-hidden bg-gray-200">
@@ -113,7 +113,7 @@ const ProfileCard = () => {
         </div>
       </div>
 
-      {/* About */}
+      {/* About Section */}
       <div className="bg-gray-50 rounded-lg shadow-2xl p-4 mt-4">
         <h2 className="text-base font-bold text-gray-900 mb-3">About</h2>
         <div className="space-y-2 text-gray-700 text-sm">
@@ -127,18 +127,22 @@ const ProfileCard = () => {
   );
 };
 
-// App Component
-function App() {
+// Main Profile Layout
+const Profile = () => {
   return (
-    <div className="min-h-screen bg-gray-100 p-4">
-      <div className="max-w-4xl mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
-          <div className="lg:col-span-3"><ProfileCard /></div>
-          <div className="lg:col-span-1"><StatsGrid /></div>
+    <div className="min-h-screen bg-gray-100 pt-24 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+          <div className="lg:col-span-3">
+            <ProfileCard />
+          </div>
+          <div className="lg:col-span-1">
+            <StatsGrid />
+          </div>
         </div>
       </div>
     </div>
   );
-}
+};
 
-export default App;
+export default Profile;
