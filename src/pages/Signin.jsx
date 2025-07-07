@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 import VyugamLogo from "../assets/vyugamHQ.png";
 import { useAuth } from "../context/AuthContext";
 
@@ -10,6 +11,7 @@ const Signin = () => {
     remember: false,
   });
 
+  const [showPassword, setShowPassword] = useState(false); // 👁️ new state
   const [resetEmail, setResetEmail] = useState("");
   const [showResetModal, setShowResetModal] = useState(false);
   const [error, setError] = useState("");
@@ -91,15 +93,12 @@ const Signin = () => {
 
   return (
     <div className="min-h-screen w-full relative flex items-center justify-center bg-cover bg-center bg-no-repeat px-4 pt-[100px]"
-      style={{
-        backgroundImage: "url('/sigin bg.jpg')",
-      }}
+      style={{ backgroundImage: "url('/sigin bg.jpg')" }}
     >
-
-      {/* Overlay to darken background slightly */}
+      {/* Overlay */}
       <div className="absolute inset-0 bg-black bg-opacity-70 z-0" />
 
-      {/* Content (Form) */}
+      {/* Content */}
       <div className="z-10 w-full max-w-md">
         <div className="flex justify-center">
           <img src={VyugamLogo} alt="Vyugam Logo" className="w-40 mb-6" />
@@ -109,6 +108,7 @@ const Signin = () => {
           onSubmit={handleSubmit}
           className="w-full bg-white/90 border border-gray-200 rounded-2xl shadow-lg p-8 space-y-6 backdrop-blur-md"
         >
+          {/* Email */}
           <div>
             <label className="block text-sm font-semibold mb-1">Email</label>
             <input
@@ -121,20 +121,31 @@ const Signin = () => {
             />
           </div>
 
+          {/* Password + Eye */}
           <div>
             <label className="block text-sm font-semibold mb-1">Password</label>
-            <input
-              type="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              required
-              className="w-full border border-gray-300 rounded-md px-3 py-2"
-            />
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"}
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                required
+                className="w-full border border-gray-300 rounded-md px-3 py-2 pr-10"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute top-1/2 right-3 -translate-y-1/2 text-gray-600 hover:text-red-500"
+              >
+                {showPassword ? <FaEyeSlash /> : <FaEye />}
+              </button>
+            </div>
           </div>
 
           {error && <p className="text-sm text-red-500">{error}</p>}
 
+          {/* Remember + Forgot link */}
           <div className="flex justify-between items-center text-sm text-gray-600">
             <label className="flex items-center">
               <input
@@ -156,6 +167,7 @@ const Signin = () => {
             </button>
           </div>
 
+          {/* Submit */}
           <button
             type="submit"
             disabled={loading}
@@ -172,7 +184,7 @@ const Signin = () => {
         </form>
       </div>
 
-      {/* 🔐 Forgot Password Modal */}
+      {/* Reset Modal */}
       {showResetModal && (
         <div className="fixed inset-0 bg-black bg-opacity-60 z-50 flex items-center justify-center px-4">
           <div className="w-full max-w-md bg-white p-6 rounded-xl shadow-2xl space-y-4 relative z-50">

@@ -27,12 +27,17 @@ const Header = () => {
     navigate("/verify");
   };
 
+  const handleProfileRedirect = () => {
+    setDropdownOpen(false);
+    navigate("/profile");
+  };
+
   // 🛑 Hide tabs + search bar on these routes
   const hideTabsAndSearch = ["/signin", "/signup", "/verify", "/profile", "/edit-profile"];
 
   return (
     <>
-      {/* ✅ FIXED TOP NAV */}
+      {/* ✅ FIXED NAVBAR */}
       <div className="z-50 fixed top-0 left-0 w-full bg-white shadow-md border-b border-gray-200">
         <div className="flex justify-between items-center px-8 py-4 max-w-[1440px] mx-auto">
           {/* LEFT: Logo & Nav */}
@@ -45,9 +50,7 @@ const Header = () => {
               <Link to="/blog" className="text-gray-600 hover:text-red-600 transition">
                 Blog
               </Link>
-              <Link to="/profile" className="text-gray-600 hover:text-red-600 transition">
-                Profile
-              </Link>
+              {/* ❌ Profile removed from here */}
             </nav>
           </div>
 
@@ -64,11 +67,19 @@ const Header = () => {
                 >
                   <FaUserCircle />
                 </button>
+
+                {/* 👇 Dropdown Menu */}
                 {dropdownOpen && (
-                  <div className="absolute top-full right-0 mt-2 w-36 bg-white border border-gray-200 rounded shadow-md z-50">
+                  <div className="absolute top-full right-0 mt-2 w-40 bg-white border border-gray-200 rounded shadow-md z-50">
+                    <button
+                      onClick={handleProfileRedirect}
+                      className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition"
+                    >
+                      My Profile
+                    </button>
                     <button
                       onClick={handleLogout}
-                      className="block w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-gray-100 transition"
+                      className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100 transition"
                     >
                       Logout
                     </button>
@@ -92,7 +103,7 @@ const Header = () => {
         </div>
       </div>
 
-      {/* 🛑 REMOVE TABS + SEARCH on certain pages */}
+      {/* Tabs + Search Section */}
       {!hideTabsAndSearch.includes(location.pathname) && (
         <div className="pt-[106px] bg-white">
           {/* Tabs */}
