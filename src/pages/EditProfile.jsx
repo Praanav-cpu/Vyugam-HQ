@@ -39,40 +39,40 @@ const EditProfile = () => {
         ]);
 
         if (aboutRes.ok) {
-          const data = await aboutRes.json();
+          const about = await aboutRes.json();
           setFormData((prev) => ({
             ...prev,
-            ...data,
+            ...about,
             profile_pic: null,
           }));
-          setPreviewPic(data.profile_pic);
+          setPreviewPic(about.profile_pic); // Direct URL
         }
 
         if (eduRes.ok) {
-          const data = await eduRes.json();
+          const edu = await eduRes.json();
           setFormData((prev) => ({
             ...prev,
-            degree: data.degree,
-            institute: data.institute,
-            noEducation: !data.degree && !data.institute,
+            degree: edu.degree,
+            institute: edu.institute,
+            noEducation: !edu.degree && !edu.institute,
           }));
         }
 
         if (expRes.ok) {
-          const data = await expRes.json();
+          const exp = await expRes.json();
           setFormData((prev) => ({
             ...prev,
-            gaming_experience: data.gaming_experience,
+            gaming_experience: exp.gaming_experience,
           }));
         }
 
         if (socialRes.ok) {
-          const data = await socialRes.json();
+          const socials = await socialRes.json();
           setFormData((prev) => ({
             ...prev,
-            instagram: data.instagram,
-            discord: data.discord,
-            x_url: data.x_url,
+            instagram: socials.instagram,
+            discord: socials.discord,
+            x_url: socials.x_url,
           }));
         }
       } catch (err) {
@@ -86,11 +86,12 @@ const EditProfile = () => {
 
   const handleChange = (e) => {
     const { name, value, type, checked, files } = e.target;
+
     if (type === "file") {
       const file = files[0];
       if (file) {
         setFormData((prev) => ({ ...prev, profile_pic: file }));
-        setPreviewPic(URL.createObjectURL(file));
+        setPreviewPic(URL.createObjectURL(file)); // Live preview
       }
     } else {
       setFormData((prev) => ({
@@ -185,10 +186,14 @@ const EditProfile = () => {
 
   return (
     <>
-      {/* Toast Notification */}
       {toast.message && (
-        <div className={`fixed top-6 right-6 z-50 px-4 py-2 rounded-md font-medium shadow-lg transition-all duration-300
-          ${toast.type === "success" ? "bg-green-500 text-white" : "bg-red-500 text-white"}`}>
+        <div
+          className={`fixed top-6 right-6 z-50 px-4 py-2 rounded-md font-medium shadow-lg transition-all duration-300 ${
+            toast.type === "success"
+              ? "bg-green-500 text-white"
+              : "bg-red-500 text-white"
+          }`}
+        >
           {toast.message}
         </div>
       )}
@@ -209,60 +214,18 @@ const EditProfile = () => {
           <div className="col-span-2 space-y-6">
             <div className="bg-white border rounded-lg shadow-sm p-6 space-y-4">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <input
-                  name="first_name"
-                  placeholder="First Name"
-                  value={formData.first_name}
-                  onChange={handleChange}
-                  className="border px-4 py-2 rounded-md"
-                />
-                <input
-                  name="last_name"
-                  placeholder="Last Name"
-                  value={formData.last_name}
-                  onChange={handleChange}
-                  className="border px-4 py-2 rounded-md"
-                />
-                <input
-                  name="phone"
-                  placeholder="Phone Number"
-                  value={formData.phone}
-                  onChange={handleChange}
-                  className="col-span-2 border px-4 py-2 rounded-md"
-                />
-                <select
-                  name="gender"
-                  value={formData.gender}
-                  onChange={handleChange}
-                  className="border px-4 py-2 rounded-md"
-                >
+                <input name="first_name" value={formData.first_name} onChange={handleChange} placeholder="First Name" className="border px-4 py-2 rounded-md" />
+                <input name="last_name" value={formData.last_name} onChange={handleChange} placeholder="Last Name" className="border px-4 py-2 rounded-md" />
+                <input name="phone" value={formData.phone} onChange={handleChange} placeholder="Phone Number" className="col-span-2 border px-4 py-2 rounded-md" />
+                <select name="gender" value={formData.gender} onChange={handleChange} className="border px-4 py-2 rounded-md">
                   <option value="">Select Gender</option>
                   <option>Male</option>
                   <option>Female</option>
                   <option>Other</option>
                 </select>
-                <input
-                  name="city"
-                  placeholder="City"
-                  value={formData.city}
-                  onChange={handleChange}
-                  className="border px-4 py-2 rounded-md"
-                />
-                <input
-                  name="state"
-                  placeholder="State"
-                  value={formData.state}
-                  onChange={handleChange}
-                  className="border px-4 py-2 rounded-md"
-                />
-                <textarea
-                  name="bio"
-                  placeholder="Short Bio (Gaming title, etc.)"
-                  rows={2}
-                  value={formData.bio}
-                  onChange={handleChange}
-                  className="col-span-2 border px-4 py-2 rounded-md"
-                />
+                <input name="city" value={formData.city} onChange={handleChange} placeholder="City" className="border px-4 py-2 rounded-md" />
+                <input name="state" value={formData.state} onChange={handleChange} placeholder="State" className="border px-4 py-2 rounded-md" />
+                <textarea name="bio" value={formData.bio} onChange={handleChange} placeholder="Short Bio (Gaming title, etc.)" rows={2} className="col-span-2 border px-4 py-2 rounded-md" />
               </div>
             </div>
 
@@ -303,9 +266,7 @@ const EditProfile = () => {
 
             {/* Gaming Experience */}
             <div className="bg-white border rounded-lg shadow-sm p-6">
-              <label className="block mb-2 font-medium text-sm">
-                Gaming Experience
-              </label>
+              <label className="block mb-2 font-medium text-sm">Gaming Experience</label>
               {gamingOptions.map((opt, i) => (
                 <label key={i} className="flex items-center mb-1 text-sm">
                   <input
@@ -323,27 +284,9 @@ const EditProfile = () => {
 
             {/* Socials */}
             <div className="bg-white border rounded-lg shadow-sm p-6 space-y-3">
-              <input
-                name="instagram"
-                placeholder="Instagram"
-                value={formData.instagram}
-                onChange={handleChange}
-                className="border px-4 py-2 rounded-md w-full"
-              />
-              <input
-                name="discord"
-                placeholder="Discord"
-                value={formData.discord}
-                onChange={handleChange}
-                className="border px-4 py-2 rounded-md w-full"
-              />
-              <input
-                name="x_url"
-                placeholder="X / Twitter"
-                value={formData.x_url}
-                onChange={handleChange}
-                className="border px-4 py-2 rounded-md w-full"
-              />
+              <input name="instagram" placeholder="Instagram" value={formData.instagram} onChange={handleChange} className="border px-4 py-2 rounded-md w-full" />
+              <input name="discord" placeholder="Discord" value={formData.discord} onChange={handleChange} className="border px-4 py-2 rounded-md w-full" />
+              <input name="x_url" placeholder="X / Twitter" value={formData.x_url} onChange={handleChange} className="border px-4 py-2 rounded-md w-full" />
             </div>
           </div>
 
@@ -376,7 +319,6 @@ const EditProfile = () => {
               </button>
             </div>
 
-            {/* About Me */}
             <div className="bg-white border rounded-lg shadow-sm p-6">
               <label className="text-sm font-medium mb-1 block">About Me</label>
               <textarea

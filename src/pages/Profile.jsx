@@ -51,18 +51,13 @@ const StatsGrid = () => {
   );
 };
 
-// ✅ ProfileCard Component
+// ProfileCard Component
 const ProfileCard = () => {
   const { username } = useParams();
   const navigate = useNavigate();
   const [profile, setProfile] = useState(null);
   const [error, setError] = useState("");
   const fileInputRef = useRef(null);
-
-  const defaultBanner =
-    "https://images.unsplash.com/photo-1581349482221-92a800f53ebb?auto=compress&cs=tinysrgb&w=1200&q=50&blend=404040&sat=-100&exp=5&blend-mode=multiply";
-
-  const [bannerImage, setBannerImage] = useState(null);
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -73,6 +68,7 @@ const ProfileCard = () => {
           : `https://vyugamhq-backend.onrender.com/api/profile/`;
 
         const headers = username ? {} : { Authorization: `Bearer ${token}` };
+
         const res = await fetch(url, { headers });
 
         if (res.status === 401) {
@@ -84,11 +80,6 @@ const ProfileCard = () => {
 
         const data = await res.json();
         setProfile(data);
-
-        // ✅ Set banner from API if available
-        if (data?.banner) {
-          setBannerImage(`https://vyugamhq-backend.onrender.com/${data.banner}`);
-        }
       } catch (err) {
         setError(err.message);
       }
@@ -103,32 +94,37 @@ const ProfileCard = () => {
     }
   };
 
-  const handleBannerChange = (e) => {
+  const handleBannerChange = async (e) => {
     const file = e.target.files[0];
     if (file && file.type.startsWith("image/")) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setBannerImage(reader.result);
-      };
-      reader.readAsDataURL(file);
+      const token = localStorage.getItem("access_token");
+      const formData = new FormData();
+      formData.append("profile_banner", file);
+
+      try {
+        const res = await fetch("https://vyugamhq-backend.onrender.com/api/profile/about/", {
+          method: "PUT",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          body: formData,
+        });
+
+        if (!res.ok) throw new Error("Upload failed");
+
+        const updated = await res.json();
+        setProfile((prev) => ({
+          ...prev,
+          profile_banner: updated.profile_banner,
+        }));
+      } catch (err) {
+        alert("Failed to upload banner.");
+      }
     }
   };
 
-  if (error) return <div className="text-red-600 text-center py-4">{error}</div>;
-
-  if (!profile) {
-    return (
-      <div className="flex justify-center items-center h-72 bg-white rounded-md shadow">
-        <div className="flex flex-col items-center">
-          <svg className="animate-spin h-10 w-10 text-red-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
-          </svg>
-          <p className="mt-2 text-sm text-gray-500">Loading profile...</p>
-        </div>
-      </div>
-    );
-  }
+  if (error) return <div className="text-red-600">{error}</div>;
+  if (!profile) return <div>Loading...</div>;
 
   return (
     <>
@@ -137,10 +133,7 @@ const ProfileCard = () => {
         <div
           className="relative h-40 bg-cover bg-center"
           style={{
-           backgroundImage: `url("${bannerImage || defaultBanner}")`,
-           backgroundPosition: "center",
-           backgroundSize: "cover",
-           backgroundRepeat: "no-repeat",
+            backgroundImage: `url(${profile.profile_banner})`,
           }}
         >
           {!username && (
@@ -166,7 +159,7 @@ const ProfileCard = () => {
             <div className="relative">
               <div className="w-20 h-20 rounded-full border-4 border-white shadow-lg overflow-hidden bg-gray-200">
                 <img
-                  src={`https://vyugamhq-backend.onrender.com/${profile.profile_pic}`}
+                  src={profile.profile_pic}
                   alt="Profile Avatar"
                   className="w-full h-full object-cover"
                 />
@@ -180,32 +173,47 @@ const ProfileCard = () => {
         <div className="pt-20 pb-6 px-6">
           <div className="mb-4 flex flex-col sm:flex-row sm:items-center sm:justify-between">
             <div>
-              <h1 className="text-xl font-bold text-gray-900 mb-0.5">{profile.name}</h1>
+              <h1 className="text-xl font-bold text-gray-900 mb-0.5">
+                {profile.name}
+              </h1>
               <p className="text-gray-600 text-sm">@{profile.username}</p>
             </div>
 
             <div className="flex mt-2 sm:mt-0 space-x-2 flex-wrap">
               {profile.socials?.discord && (
-                <a href={profile.socials.discord} target="_blank" rel="noreferrer"
-                  className="w-9 h-9 bg-gray-100 rounded-full flex items-center justify-center text-gray-800 shadow hover:bg-gray-200 transition">
+                <a
+                  href={profile.socials.discord}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="w-9 h-9 bg-gray-100 rounded-full flex items-center justify-center text-gray-800 shadow hover:bg-gray-200 transition"
+                >
                   <FaDiscord size={16} />
                 </a>
               )}
               {profile.socials?.instagram && (
-                <a href={profile.socials.instagram} target="_blank" rel="noreferrer"
-                  className="w-9 h-9 bg-gray-100 rounded-full flex items-center justify-center text-gray-800 shadow hover:bg-gray-200 transition">
+                <a
+                  href={profile.socials.instagram}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="w-9 h-9 bg-gray-100 rounded-full flex items-center justify-center text-gray-800 shadow hover:bg-gray-200 transition"
+                >
                   <FaInstagram size={16} />
                 </a>
               )}
               {profile.socials?.x && (
-                <a href={profile.socials.x} target="_blank" rel="noreferrer"
-                  className="w-9 h-9 bg-gray-100 rounded-full flex items-center justify-center text-gray-800 shadow hover:bg-gray-200 transition">
+                <a
+                  href={profile.socials.x}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="w-9 h-9 bg-gray-100 rounded-full flex items-center justify-center text-gray-800 shadow hover:bg-gray-200 transition"
+                >
                   <FaTwitter size={16} />
                 </a>
               )}
               <div className="w-9 h-9 bg-gray-100 rounded-full flex items-center justify-center text-gray-800 shadow hover:bg-gray-200 transition">
                 <FaShareAlt size={16} />
               </div>
+
               {!username && (
                 <button
                   onClick={() => navigate("/edit-profile")}
@@ -228,7 +236,7 @@ const ProfileCard = () => {
           {(profile.city || profile.state) && (
             <div className="flex items-center space-x-2 mb-4 text-gray-600 text-sm">
               <MapPin className="w-4 h-4" />
-              <span>{profile.city}{profile.state ? `, ${profile.state}` : ""}</span>
+              <span>{profile.city}, {profile.state}</span>
             </div>
           )}
 
@@ -251,7 +259,7 @@ const ProfileCard = () => {
   );
 };
 
-// Main Profile Wrapper
+// Main Profile Layout
 const Profile = () => {
   return (
     <div className="min-h-screen bg-gray-100 pt-24 px-4 sm:px-6 lg:px-8">
