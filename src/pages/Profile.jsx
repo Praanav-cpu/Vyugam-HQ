@@ -8,6 +8,7 @@ import {
   FaEdit,
 } from "react-icons/fa";
 import { Shield, MapPin } from "lucide-react";
+import { fetchWithAuth } from "../utils/fetchWithAuth";
 
 // GameTag Component
 const GameTag = ({ name, variant = "outline" }) => {
@@ -62,14 +63,13 @@ const ProfileCard = () => {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const token = localStorage.getItem("access_token");
         const url = username
           ? `https://vyugamhq-backend.onrender.com/api/profile/${username}/`
           : `https://vyugamhq-backend.onrender.com/api/profile/`;
 
-        const headers = username ? {} : { Authorization: `Bearer ${token}` };
-
-        const res = await fetch(url, { headers });
+        const res = username
+          ? await fetch(url)
+          : await fetchWithAuth(url);
 
         if (res.status === 401) {
           setError("You must be logged in to view this profile.");
@@ -97,16 +97,12 @@ const ProfileCard = () => {
   const handleBannerChange = async (e) => {
     const file = e.target.files[0];
     if (file && file.type.startsWith("image/")) {
-      const token = localStorage.getItem("access_token");
       const formData = new FormData();
       formData.append("profile_banner", file);
 
       try {
-        const res = await fetch("https://vyugamhq-backend.onrender.com/api/profile/about/", {
+        const res = await fetchWithAuth("https://vyugamhq-backend.onrender.com/api/profile/about/", {
           method: "PUT",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
           body: formData,
         });
 
@@ -181,30 +177,21 @@ const ProfileCard = () => {
 
             <div className="flex mt-2 sm:mt-0 space-x-2 flex-wrap">
               {profile.socials?.discord && (
-                <a
-                  href={profile.socials.discord}
-                  target="_blank"
-                  rel="noreferrer"
+                <a href={profile.socials.discord} target="_blank" rel="noreferrer"
                   className="w-9 h-9 bg-gray-100 rounded-full flex items-center justify-center text-gray-800 shadow hover:bg-gray-200 transition"
                 >
                   <FaDiscord size={16} />
                 </a>
               )}
               {profile.socials?.instagram && (
-                <a
-                  href={profile.socials.instagram}
-                  target="_blank"
-                  rel="noreferrer"
+                <a href={profile.socials.instagram} target="_blank" rel="noreferrer"
                   className="w-9 h-9 bg-gray-100 rounded-full flex items-center justify-center text-gray-800 shadow hover:bg-gray-200 transition"
                 >
                   <FaInstagram size={16} />
                 </a>
               )}
               {profile.socials?.x && (
-                <a
-                  href={profile.socials.x}
-                  target="_blank"
-                  rel="noreferrer"
+                <a href={profile.socials.x} target="_blank" rel="noreferrer"
                   className="w-9 h-9 bg-gray-100 rounded-full flex items-center justify-center text-gray-800 shadow hover:bg-gray-200 transition"
                 >
                   <FaTwitter size={16} />

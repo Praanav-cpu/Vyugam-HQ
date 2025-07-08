@@ -1,4 +1,5 @@
 import React, { useRef, useState, useEffect } from "react";
+import { fetchWithAuth } from "../utils/fetchWithAuth";
 
 const EditProfile = () => {
   const [formData, setFormData] = useState({
@@ -25,17 +26,15 @@ const EditProfile = () => {
   const [toast, setToast] = useState({ message: "", type: "" });
 
   const fileInputRef = useRef(null);
-  const token = localStorage.getItem("access_token");
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const headers = { Authorization: `Bearer ${token}` };
         const [aboutRes, eduRes, expRes, socialRes] = await Promise.all([
-          fetch("https://vyugamhq-backend.onrender.com/api/profile/about/", { headers }),
-          fetch("https://vyugamhq-backend.onrender.com/api/profile/education/", { headers }),
-          fetch("https://vyugamhq-backend.onrender.com/api/profile/experience/", { headers }),
-          fetch("https://vyugamhq-backend.onrender.com/api/profile/socials/", { headers }),
+          fetchWithAuth("https://vyugamhq-backend.onrender.com/api/profile/about/"),
+          fetchWithAuth("https://vyugamhq-backend.onrender.com/api/profile/education/"),
+          fetchWithAuth("https://vyugamhq-backend.onrender.com/api/profile/experience/"),
+          fetchWithAuth("https://vyugamhq-backend.onrender.com/api/profile/socials/"),
         ]);
 
         if (aboutRes.ok) {
@@ -45,7 +44,7 @@ const EditProfile = () => {
             ...about,
             profile_pic: null,
           }));
-          setPreviewPic(about.profile_pic); // Direct URL
+          setPreviewPic(about.profile_pic);
         }
 
         if (eduRes.ok) {
@@ -82,7 +81,7 @@ const EditProfile = () => {
     };
 
     fetchData();
-  }, [token]);
+  }, []);
 
   const handleChange = (e) => {
     const { name, value, type, checked, files } = e.target;
@@ -91,7 +90,7 @@ const EditProfile = () => {
       const file = files[0];
       if (file) {
         setFormData((prev) => ({ ...prev, profile_pic: file }));
-        setPreviewPic(URL.createObjectURL(file)); // Live preview
+        setPreviewPic(URL.createObjectURL(file));
       }
     } else {
       setFormData((prev) => ({
@@ -109,7 +108,6 @@ const EditProfile = () => {
   const saveChanges = async () => {
     try {
       setLoading(true);
-      const authHeader = { Authorization: `Bearer ${token}` };
 
       const aboutForm = new FormData();
       Object.entries({
@@ -128,15 +126,13 @@ const EditProfile = () => {
       }
 
       await Promise.all([
-        fetch("https://vyugamhq-backend.onrender.com/api/profile/about/", {
+        fetchWithAuth("https://vyugamhq-backend.onrender.com/api/profile/about/", {
           method: "PUT",
-          headers: authHeader,
           body: aboutForm,
         }),
-        fetch("https://vyugamhq-backend.onrender.com/api/profile/education/", {
+        fetchWithAuth("https://vyugamhq-backend.onrender.com/api/profile/education/", {
           method: "PUT",
           headers: {
-            ...authHeader,
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
@@ -144,20 +140,18 @@ const EditProfile = () => {
             institute: formData.noEducation ? "" : formData.institute,
           }),
         }),
-        fetch("https://vyugamhq-backend.onrender.com/api/profile/experience/", {
+        fetchWithAuth("https://vyugamhq-backend.onrender.com/api/profile/experience/", {
           method: "PUT",
           headers: {
-            ...authHeader,
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
             gaming_experience: formData.gaming_experience,
           }),
         }),
-        fetch("https://vyugamhq-backend.onrender.com/api/profile/socials/", {
+        fetchWithAuth("https://vyugamhq-backend.onrender.com/api/profile/socials/", {
           method: "PUT",
           headers: {
-            ...authHeader,
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
@@ -229,7 +223,6 @@ const EditProfile = () => {
               </div>
             </div>
 
-            {/* Education */}
             <div className="bg-white border rounded-lg shadow-sm p-6">
               <label className="flex items-center justify-between mb-2 font-medium text-sm">
                 Degree
@@ -264,7 +257,6 @@ const EditProfile = () => {
               )}
             </div>
 
-            {/* Gaming Experience */}
             <div className="bg-white border rounded-lg shadow-sm p-6">
               <label className="block mb-2 font-medium text-sm">Gaming Experience</label>
               {gamingOptions.map((opt, i) => (
@@ -282,7 +274,6 @@ const EditProfile = () => {
               ))}
             </div>
 
-            {/* Socials */}
             <div className="bg-white border rounded-lg shadow-sm p-6 space-y-3">
               <input name="instagram" placeholder="Instagram" value={formData.instagram} onChange={handleChange} className="border px-4 py-2 rounded-md w-full" />
               <input name="discord" placeholder="Discord" value={formData.discord} onChange={handleChange} className="border px-4 py-2 rounded-md w-full" />
@@ -295,10 +286,7 @@ const EditProfile = () => {
             <div className="bg-white border rounded-lg shadow-sm p-6 text-center">
               <div className="mx-auto w-28 h-28 rounded-full border overflow-hidden mb-4">
                 <img
-                  src={
-                    previewPic ||
-                    "https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg"
-                  }
+                  src={previewPic || "https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg"}
                   alt="Avatar"
                   className="w-full h-full object-cover"
                 />
