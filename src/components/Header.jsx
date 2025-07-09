@@ -33,7 +33,16 @@ const Header = () => {
   };
 
   // 🛑 Hide tabs + search bar on these routes
-  const hideTabsAndSearch = ["/signin", "/signup", "/verify", "/profile", "/edit-profile"];
+  const shouldHideTabsAndSearch = () => {
+    const path = location.pathname;
+    return (
+      path.startsWith("/profile") || // catches /profile and /profile/username
+      path === "/signin" ||
+      path === "/signup" ||
+      path === "/verify" ||
+      path === "/edit-profile"
+    );
+  };
 
   return (
     <>
@@ -104,7 +113,7 @@ const Header = () => {
       </div>
 
       {/* Tabs + Search Section */}
-      {!hideTabsAndSearch.includes(location.pathname) && (
+      {!shouldHideTabsAndSearch() && (
         <div className="pt-[106px] bg-white">
           {/* Tabs */}
           <div className="flex justify-center py-4 bg-gray-50 border-b border-gray-200 px-6">

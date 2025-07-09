@@ -24,7 +24,6 @@ const EditProfile = () => {
   const [previewPic, setPreviewPic] = useState("");
   const [loading, setLoading] = useState(false);
   const [toast, setToast] = useState({ message: "", type: "" });
-
   const fileInputRef = useRef(null);
 
   useEffect(() => {
@@ -45,6 +44,7 @@ const EditProfile = () => {
             profile_pic: null,
           }));
           setPreviewPic(about.profile_pic);
+          console.log("Fetched profile pic:", about.profile_pic);
         }
 
         if (eduRes.ok) {
@@ -183,9 +183,7 @@ const EditProfile = () => {
       {toast.message && (
         <div
           className={`fixed top-6 right-6 z-50 px-4 py-2 rounded-md font-medium shadow-lg transition-all duration-300 ${
-            toast.type === "success"
-              ? "bg-green-500 text-white"
-              : "bg-red-500 text-white"
+            toast.type === "success" ? "bg-green-500 text-white" : "bg-red-500 text-white"
           }`}
         >
           {toast.message}
@@ -193,20 +191,33 @@ const EditProfile = () => {
       )}
 
       <div className="min-h-screen bg-white text-black pt-[100px] px-4 pb-20">
+        {/* Static Tab-style Header */}
         <div className="max-w-6xl mx-auto flex items-center justify-between mb-6">
-          <h2 className="text-xl font-semibold">Edit Profile</h2>
+          <div className="flex space-x-4 overflow-x-auto">
+            {["About", "Education", "Experience", "Socials"].map((tab, index) => (
+              <button
+                key={index}
+                className="px-4 py-2 rounded-md font-medium border bg-red-500 text-white"
+              >
+                {tab}
+              </button>
+            ))}
+          </div>
           <button
             onClick={saveChanges}
-            className="bg-red-500 text-white font-semibold px-6 py-2 rounded-lg hover:bg-red-600"
+            className="bg-red-500 text-white font-semibold px-6 py-2 rounded-lg hover:bg-red-600 transition"
           >
             {loading ? "Saving..." : "Save"}
           </button>
         </div>
 
+        {/* Content */}
         <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Left */}
+          {/* Left Side */}
           <div className="col-span-2 space-y-6">
+            {/* About Section */}
             <div className="bg-white border rounded-lg shadow-sm p-6 space-y-4">
+              <h3 className="text-lg font-semibold mb-2">About</h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <input name="first_name" value={formData.first_name} onChange={handleChange} placeholder="First Name" className="border px-4 py-2 rounded-md" />
                 <input name="last_name" value={formData.last_name} onChange={handleChange} placeholder="Last Name" className="border px-4 py-2 rounded-md" />
@@ -223,82 +234,59 @@ const EditProfile = () => {
               </div>
             </div>
 
-            <div className="bg-white border rounded-lg shadow-sm p-6">
-              <label className="flex items-center justify-between mb-2 font-medium text-sm">
+            {/* Education Section */}
+            <div className="bg-white border rounded-lg shadow-sm p-6 space-y-4">
+              <h3 className="text-lg font-semibold mb-2">Education</h3>
+              <label className="flex items-center justify-between text-sm font-medium">
                 Degree
                 <span>
                   No Formal Education
-                  <input
-                    type="checkbox"
-                    name="noEducation"
-                    checked={formData.noEducation}
-                    onChange={handleChange}
-                    className="ml-2"
-                  />
+                  <input type="checkbox" name="noEducation" checked={formData.noEducation} onChange={handleChange} className="ml-2" />
                 </span>
               </label>
               {!formData.noEducation && (
                 <>
-                  <input
-                    name="degree"
-                    value={formData.degree}
-                    onChange={handleChange}
-                    className="border px-4 py-2 rounded-md mb-2 w-full"
-                    placeholder="Degree"
-                  />
-                  <input
-                    name="institute"
-                    value={formData.institute}
-                    onChange={handleChange}
-                    className="border px-4 py-2 rounded-md w-full"
-                    placeholder="Institute"
-                  />
+                  <input name="degree" value={formData.degree} onChange={handleChange} placeholder="Degree" className="border px-4 py-2 rounded-md w-full" />
+                  <input name="institute" value={formData.institute} onChange={handleChange} placeholder="Institute" className="border px-4 py-2 rounded-md w-full" />
                 </>
               )}
             </div>
 
-            <div className="bg-white border rounded-lg shadow-sm p-6">
-              <label className="block mb-2 font-medium text-sm">Gaming Experience</label>
-              {gamingOptions.map((opt, i) => (
-                <label key={i} className="flex items-center mb-1 text-sm">
-                  <input
-                    type="radio"
-                    name="gaming_experience"
-                    value={opt.value}
-                    checked={formData.gaming_experience === opt.value}
-                    onChange={handleChange}
-                    className="mr-2"
-                  />
+            {/* Experience Section */}
+            <div className="bg-white border rounded-lg shadow-sm p-6 space-y-3">
+              <h3 className="text-lg font-semibold mb-2">Experience</h3>
+              {gamingOptions.map((opt) => (
+                <label key={opt.value} className="flex items-center gap-2 text-sm">
+                  <input type="radio" name="gaming_experience" value={opt.value} checked={formData.gaming_experience === opt.value} onChange={handleChange} />
                   {opt.label}
                 </label>
               ))}
             </div>
 
+            {/* Socials Section */}
             <div className="bg-white border rounded-lg shadow-sm p-6 space-y-3">
+              <h3 className="text-lg font-semibold mb-2">Socials</h3>
               <input name="instagram" placeholder="Instagram" value={formData.instagram} onChange={handleChange} className="border px-4 py-2 rounded-md w-full" />
               <input name="discord" placeholder="Discord" value={formData.discord} onChange={handleChange} className="border px-4 py-2 rounded-md w-full" />
               <input name="x_url" placeholder="X / Twitter" value={formData.x_url} onChange={handleChange} className="border px-4 py-2 rounded-md w-full" />
             </div>
           </div>
 
-          {/* Right */}
+          {/* Right Side - Avatar & About Me */}
           <div className="space-y-6">
             <div className="bg-white border rounded-lg shadow-sm p-6 text-center">
-              <div className="mx-auto w-28 h-28 rounded-full border overflow-hidden mb-4">
+              <div className="mx-auto w-28 h-28 rounded-full overflow-hidden border border-gray-300 mb-4">
                 <img
-                  src={previewPic || "https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg"}
-                  alt="Avatar"
+                  src={
+                    previewPic?.startsWith("http")
+                      ? previewPic
+                      : "https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg"
+                  }
+                  alt="Profile Avatar"
                   className="w-full h-full object-cover"
                 />
               </div>
-              <input
-                type="file"
-                name="profile_pic"
-                ref={fileInputRef}
-                accept="image/*"
-                onChange={handleChange}
-                className="hidden"
-              />
+              <input type="file" name="profile_pic" ref={fileInputRef} accept="image/*" onChange={handleChange} className="hidden" />
               <button
                 onClick={() => fileInputRef.current?.click()}
                 className="bg-gray-100 font-semibold text-sm px-4 py-2 rounded-full hover:bg-gray-200 transition"
@@ -309,13 +297,7 @@ const EditProfile = () => {
 
             <div className="bg-white border rounded-lg shadow-sm p-6">
               <label className="text-sm font-medium mb-1 block">About Me</label>
-              <textarea
-                name="about"
-                rows={5}
-                className="w-full border border-gray-300 rounded-md px-3 py-2"
-                value={formData.about}
-                onChange={handleChange}
-              />
+              <textarea name="about" rows={5} className="w-full border border-gray-300 rounded-md px-3 py-2" value={formData.about} onChange={handleChange} />
             </div>
           </div>
         </div>
