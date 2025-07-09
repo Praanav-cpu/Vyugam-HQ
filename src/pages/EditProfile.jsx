@@ -29,22 +29,37 @@ const EditProfile = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [aboutRes, eduRes, expRes, socialRes] = await Promise.all([
+        const [userRes, aboutRes, eduRes, expRes, socialRes] = await Promise.all([
+          fetchWithAuth("https://vyugamhq-backend.onrender.com/api/profile/"), // 👈 New
           fetchWithAuth("https://vyugamhq-backend.onrender.com/api/profile/about/"),
           fetchWithAuth("https://vyugamhq-backend.onrender.com/api/profile/education/"),
           fetchWithAuth("https://vyugamhq-backend.onrender.com/api/profile/experience/"),
           fetchWithAuth("https://vyugamhq-backend.onrender.com/api/profile/socials/"),
         ]);
 
+        // ✅ First Name / Last Name from userRes
+        if (userRes.ok) {
+          const user = await userRes.json();
+          setFormData((prev) => ({
+            ...prev,
+            first_name: user.name?.split(" ")[0] || "",
+            last_name: user.name?.split(" ")[1] || "",
+          }));
+        }
+
         if (aboutRes.ok) {
           const about = await aboutRes.json();
           setFormData((prev) => ({
             ...prev,
-            ...about,
-            profile_pic: null,
+            phone: about.phone,
+            gender: about.gender,
+            city: about.city,
+            state: about.state,
+            bio: about.bio,
+            about: about.about,
+            profile_pic: null, // 👈 ensure file input is still clear
           }));
           setPreviewPic(about.profile_pic);
-          console.log("Fetched profile pic:", about.profile_pic);
         }
 
         if (eduRes.ok) {
@@ -82,6 +97,7 @@ const EditProfile = () => {
 
     fetchData();
   }, []);
+
 
   const handleChange = (e) => {
     const { name, value, type, checked, files } = e.target;
