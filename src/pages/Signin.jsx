@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { FcGoogle } from "react-icons/fc";
 import VyugamLogo from "../assets/vyugamHQ.png";
 import { useAuth } from "../context/AuthContext";
 
@@ -36,14 +37,17 @@ const Signin = () => {
     setLoading(true);
 
     try {
-      const response = await fetch("https://vyugamhq-backend.onrender.com/api/user/login/", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email: formData.email,
-          password: formData.password,
-        }),
-      });
+      const response = await fetch(
+        "https://vyugamhq-backend.onrender.com/api/user/login/",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            email: formData.email,
+            password: formData.password,
+          }),
+        }
+      );
 
       const data = await response.json();
 
@@ -54,7 +58,11 @@ const Signin = () => {
         setUser({ email: formData.email });
         navigate("/");
       } else {
-        setError(data?.errors?.non_field_errors?.[0] || data?.msg || "Invalid credentials");
+        setError(
+          data?.errors?.non_field_errors?.[0] ||
+            data?.msg ||
+            "Invalid credentials"
+        );
       }
     } catch {
       setError("Server error. Please try again later.");
@@ -73,11 +81,14 @@ const Signin = () => {
     }
 
     try {
-      const response = await fetch("https://vyugamhq-backend.onrender.com/api/user/resetpasswordemail/", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: resetEmail }),
-      });
+      const response = await fetch(
+        "https://vyugamhq-backend.onrender.com/api/user/resetpasswordemail/",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email: resetEmail }),
+        }
+      );
 
       const data = await response.json();
 
@@ -91,8 +102,14 @@ const Signin = () => {
     }
   };
 
+  const handleGoogleSignIn = () => {
+    // 👇 You can later replace this with your real logic
+    navigate("/google-signin"); // Route where Google login is handled
+  };
+
   return (
-    <div className="min-h-screen w-full relative flex items-center justify-center bg-cover bg-center bg-no-repeat px-4 pt-[100px]"
+    <div
+      className="min-h-screen w-full relative flex items-center justify-center bg-cover bg-center bg-no-repeat px-4 pt-[100px]"
       style={{ backgroundImage: "url('/sigin bg.jpg')" }}
     >
       <div className="absolute inset-0 bg-black bg-opacity-70 z-0" />
@@ -106,6 +123,7 @@ const Signin = () => {
           onSubmit={handleSubmit}
           className="w-full bg-white/90 border border-gray-200 rounded-2xl shadow-lg p-8 space-y-6 backdrop-blur-md"
         >
+          {/* Email */}
           <div>
             <label className="block text-sm font-semibold mb-1">Email</label>
             <input
@@ -118,6 +136,7 @@ const Signin = () => {
             />
           </div>
 
+          {/* Password */}
           <div>
             <label className="block text-sm font-semibold mb-1">Password</label>
             <div className="relative">
@@ -141,6 +160,7 @@ const Signin = () => {
 
           {error && <p className="text-sm text-red-500">{error}</p>}
 
+          {/* Remember me + Forgot password */}
           <div className="flex justify-between items-center text-sm text-gray-600">
             <label className="flex items-center">
               <input
@@ -162,6 +182,7 @@ const Signin = () => {
             </button>
           </div>
 
+          {/* Submit */}
           <button
             type="submit"
             disabled={loading}
@@ -170,14 +191,36 @@ const Signin = () => {
             {loading ? "Signing in..." : "Sign In"}
           </button>
 
-          <p className="text-center text-xs text-gray-500 mt-2">
+          {/* Divider */}
+          <div className="relative text-center text-xs text-gray-500 my-4">
+            <div className="absolute left-0 top-1/2 w-full border-t border-gray-200" />
+            <span className="relative px-3 bg-white">OR</span>
+          </div>
+
+          {/* Google Sign In */}
+          <button
+            type="button"
+            onClick={handleGoogleSignIn}
+            className="w-full border border-gray-300 bg-white hover:bg-gray-50 text-sm text-gray-700 font-semibold py-2 rounded-md flex items-center justify-center gap-2 transition"
+          >
+            <FcGoogle size={20} />
+            Continue with Google
+          </button>
+
+          <p className="text-center text-xs text-gray-500 mt-4">
             By signing in, you agree to our{" "}
-            <a href="#" className="text-blue-600 underline">Terms & Conditions</a> and{" "}
-            <a href="#" className="text-red-500 underline">Privacy Policy</a>.
+            <a href="#" className="text-blue-600 underline">
+              Terms & Conditions
+            </a>{" "}
+            and{" "}
+            <a href="#" className="text-red-500 underline">
+              Privacy Policy
+            </a>.
           </p>
         </form>
       </div>
 
+      {/* Reset modal */}
       {showResetModal && (
         <div className="fixed inset-0 bg-black bg-opacity-60 z-50 flex items-center justify-center px-4">
           <div className="w-full max-w-md bg-white p-6 rounded-xl shadow-2xl space-y-4 relative z-50">
@@ -188,7 +231,9 @@ const Signin = () => {
               ×
             </button>
 
-            <h2 className="text-xl font-semibold text-gray-800">Forgot your password?</h2>
+            <h2 className="text-xl font-semibold text-gray-800">
+              Forgot your password?
+            </h2>
             <p className="text-sm text-gray-500">
               Enter your registered email and we’ll send a reset link.
             </p>
