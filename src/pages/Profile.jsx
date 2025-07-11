@@ -71,8 +71,9 @@ const ProfileCard = () => {
           ? await fetch(url)
           : await fetchWithAuth(url);
 
-        if (res.status === 401) {
-          setError("You must be logged in to view this profile.");
+        if (res.status === 401 && !username) {
+          // ✅ Redirect unauthenticated users to sign in if it's their own profile
+          navigate("/signin");
           return;
         }
 
@@ -86,7 +87,7 @@ const ProfileCard = () => {
     };
 
     fetchProfile();
-  }, [username]);
+  }, [username, navigate]);
 
   const triggerBannerUpload = () => {
     if (fileInputRef.current) {

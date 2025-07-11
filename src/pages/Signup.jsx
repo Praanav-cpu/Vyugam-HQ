@@ -58,9 +58,30 @@ const Signup = () => {
       const data = await response.json();
 
       if (response.ok) {
-        setUser({ username: formData.vyugamhq_username });
-        navigate("/");
-      } else {
+  // Now login with same credentials to get JWT tokens
+  const loginRes = await fetch("https://vyugamhq-backend.onrender.com/api/user/login/", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      email: formData.email,
+      password: formData.password,
+    }),
+  });
+
+  const loginData = await loginRes.json();
+
+    if (loginRes.ok) {
+      const { access, refresh } = loginData.token;
+      localStorage.setItem("access_token", access);
+      localStorage.setItem("refresh_token", refresh);
+      localStorage.setItem("user", JSON.stringify({ email: formData.email }));
+      setUser({ email: formData.email });
+      navigate("/");
+    } else {
+      setError("Registered but failed to log in. Try signing in.");
+      navigate("/signin");
+    }
+    } else {
         setError(data?.detail || "Registration failed. Check inputs.");
       }
     } catch (err) {
