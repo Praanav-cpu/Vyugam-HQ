@@ -1,5 +1,9 @@
 import React, { useEffect, useState, useRef } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import {
+  useParams,
+  useNavigate,
+  Navigate,
+} from "react-router-dom";
 import {
   FaDiscord,
   FaInstagram,
@@ -9,6 +13,7 @@ import {
 } from "react-icons/fa";
 import { Shield, MapPin } from "lucide-react";
 import { fetchWithAuth } from "../utils/fetchWithAuth";
+import { useAuth } from "../context/AuthContext";
 
 // GameTag Component
 const GameTag = ({ name, variant = "outline" }) => {
@@ -55,10 +60,16 @@ const StatsGrid = () => {
 // ProfileCard Component
 const ProfileCard = () => {
   const { username } = useParams();
+  const { user } = useAuth(); // ✅ checking if logged in
   const navigate = useNavigate();
   const [profile, setProfile] = useState(null);
   const [error, setError] = useState("");
   const fileInputRef = useRef(null);
+
+  // ✅ Only redirect when viewing own profile & not logged in
+  if (!username && !user) {
+    return <Navigate to="/signin" replace />;
+  }
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -67,13 +78,10 @@ const ProfileCard = () => {
           ? `https://vyugamhq-backend.onrender.com/api/profile/${username}/`
           : `https://vyugamhq-backend.onrender.com/api/profile/`;
 
-        const res = username
-          ? await fetch(url)
-          : await fetchWithAuth(url);
+        const res = username ? await fetch(url) : await fetchWithAuth(url);
 
-        if (res.status === 401 && !username) {
-          // ✅ Redirect unauthenticated users to sign in if it's their own profile
-          navigate("/signin");
+        if (res.status === 401) {
+          setError("You must be logged in to view this profile.");
           return;
         }
 
@@ -87,7 +95,7 @@ const ProfileCard = () => {
     };
 
     fetchProfile();
-  }, [username, navigate]);
+  }, [username]);
 
   const triggerBannerUpload = () => {
     if (fileInputRef.current) {
@@ -102,10 +110,13 @@ const ProfileCard = () => {
       formData.append("profile_banner", file);
 
       try {
-        const res = await fetchWithAuth("https://vyugamhq-backend.onrender.com/api/profile/about/", {
-          method: "PUT",
-          body: formData,
-        });
+        const res = await fetchWithAuth(
+          "https://vyugamhq-backend.onrender.com/api/profile/about/",
+          {
+            method: "PUT",
+            body: formData,
+          }
+        );
 
         if (!res.ok) throw new Error("Upload failed");
 
@@ -123,6 +134,8 @@ const ProfileCard = () => {
   if (error) return <div className="text-red-600">{error}</div>;
   if (!profile) return <div>Loading...</div>;
 
+  const isOwnProfile = !username && user;
+
   return (
     <>
       <div className="bg-white rounded-xl shadow-lg overflow-hidden relative">
@@ -130,10 +143,10 @@ const ProfileCard = () => {
         <div
           className="relative h-40 bg-cover bg-center"
           style={{
-            backgroundImage: `url(${profile.profile_banner})`,
+            backgroundImage: `url(${profile.profile_banner || "/default-banner.jpg"})`,
           }}
         >
-          {!username && (
+          {isOwnProfile && (
             <>
               <input
                 type="file"
@@ -176,23 +189,33 @@ const ProfileCard = () => {
               <p className="text-gray-600 text-sm">@{profile.username}</p>
             </div>
 
+            {/* Socials + Edit button */}
             <div className="flex mt-2 sm:mt-0 space-x-2 flex-wrap">
               {profile.socials?.discord && (
-                <a href={profile.socials.discord} target="_blank" rel="noreferrer"
+                <a
+                  href={profile.socials.discord}
+                  target="_blank"
+                  rel="noreferrer"
                   className="w-9 h-9 bg-gray-100 rounded-full flex items-center justify-center text-gray-800 shadow hover:bg-gray-200 transition"
                 >
                   <FaDiscord size={16} />
                 </a>
               )}
               {profile.socials?.instagram && (
-                <a href={profile.socials.instagram} target="_blank" rel="noreferrer"
+                <a
+                  href={profile.socials.instagram}
+                  target="_blank"
+                  rel="noreferrer"
                   className="w-9 h-9 bg-gray-100 rounded-full flex items-center justify-center text-gray-800 shadow hover:bg-gray-200 transition"
                 >
                   <FaInstagram size={16} />
                 </a>
               )}
               {profile.socials?.x && (
-                <a href={profile.socials.x} target="_blank" rel="noreferrer"
+                <a
+                  href={profile.socials.x}
+                  target="_blank"
+                  rel="noreferrer"
                   className="w-9 h-9 bg-gray-100 rounded-full flex items-center justify-center text-gray-800 shadow hover:bg-gray-200 transition"
                 >
                   <FaTwitter size={16} />
@@ -202,7 +225,7 @@ const ProfileCard = () => {
                 <FaShareAlt size={16} />
               </div>
 
-              {!username && (
+              {isOwnProfile && (
                 <button
                   onClick={() => navigate("/edit-profile")}
                   className="flex items-center space-x-1 bg-gray-100 text-gray-800 px-3 py-1.5 rounded-lg hover:bg-gray-200 transition-all duration-200 border border-gray-300 text-xs shadow"
@@ -224,7 +247,9 @@ const ProfileCard = () => {
           {(profile.city || profile.state) && (
             <div className="flex items-center space-x-2 mb-4 text-gray-600 text-sm">
               <MapPin className="w-4 h-4" />
-              <span>{profile.city}, {profile.state}</span>
+              <span>
+                {profile.city}, {profile.state}
+              </span>
             </div>
           )}
 
@@ -233,7 +258,8 @@ const ProfileCard = () => {
             <GameTag name="BGMI" />
             <GameTag name="FIFA" />
             <GameTag name="Valorant" />
-            {!username && <GameTag name="+" variant="primary" />}
+            <GameTag name="call of duty" />
+            {isOwnProfile && <GameTag name="+" variant="primary" />}
           </div>
         </div>
       </div>
@@ -247,7 +273,7 @@ const ProfileCard = () => {
   );
 };
 
-// Main Profile Layout
+// Full Profile Page Layout
 const Profile = () => {
   return (
     <div className="min-h-screen bg-gray-100 pt-24 px-4 sm:px-6 lg:px-8">

@@ -30,14 +30,18 @@ const EditProfile = () => {
     const fetchData = async () => {
       try {
         const [userRes, aboutRes, eduRes, expRes, socialRes] = await Promise.all([
-          fetchWithAuth("https://vyugamhq-backend.onrender.com/api/profile/"), // 👈 New
+          fetchWithAuth("https://vyugamhq-backend.onrender.com/api/profile/"),
           fetchWithAuth("https://vyugamhq-backend.onrender.com/api/profile/about/"),
           fetchWithAuth("https://vyugamhq-backend.onrender.com/api/profile/education/"),
           fetchWithAuth("https://vyugamhq-backend.onrender.com/api/profile/experience/"),
           fetchWithAuth("https://vyugamhq-backend.onrender.com/api/profile/socials/"),
         ]);
 
-        // ✅ First Name / Last Name from userRes
+        const resolveImageUrl = (url) => {
+          if (!url) return "";
+          return url.startsWith("http") ? url : `https://vyugamhq-backend.onrender.com${url}`;
+        };
+
         if (userRes.ok) {
           const user = await userRes.json();
           setFormData((prev) => ({
@@ -57,9 +61,9 @@ const EditProfile = () => {
             state: about.state,
             bio: about.bio,
             about: about.about,
-            profile_pic: null, // 👈 ensure file input is still clear
+            profile_pic: null,
           }));
-          setPreviewPic(about.profile_pic);
+          setPreviewPic(resolveImageUrl(about.profile_pic));
         }
 
         if (eduRes.ok) {
@@ -293,11 +297,7 @@ const EditProfile = () => {
             <div className="bg-white border rounded-lg shadow-sm p-6 text-center">
               <div className="mx-auto w-28 h-28 rounded-full overflow-hidden border border-gray-300 mb-4">
                 <img
-                  src={
-                    previewPic?.startsWith("http")
-                      ? previewPic
-                      : "https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg"
-                  }
+                  src={previewPic || "https://via.placeholder.com/150"}
                   alt="Profile Avatar"
                   className="w-full h-full object-cover"
                 />
